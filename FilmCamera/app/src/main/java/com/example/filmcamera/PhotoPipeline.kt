@@ -50,26 +50,40 @@ object PhotoPipeline {
         }
     }
 
-    /** LUT(+필름 모드면 그레인). 큰 이미지를 통째로 IntArray로 만들지 않도록 띠(strip) 단위로 처리하고, 띠 안에서는 병렬 처리 */
+    /** 흐림(세부 분리) 반경: 프리뷰 셰이더(1.5텍셀, 폭 약 1300px 기준)와 비슷한 비율로 맞춘다 */
+    fun detailRadius(width: Int): Int = maxOf(2, Math.round(width * 0.0012f))
+
+    /**
+     * LUT(+필름 모드면 그레인). 색감은 흐린 이미지에 입히고 세부/노이즈는 원본 크기를 넘지 않게 제한해서,
+     * 색감을 입히는 과정에서 노이즈가 늘지 않게 한다(그레인은 이 뒤에 의도해서 얹는다).
+     * 큰 이미지를 통째로 IntArray로 만들지 않도록 띠(strip) 단위로 처리하되, 블러에 필요한 위아래 여백 행을 함께 읽는다.
+     */
     private fun applyLut(bmp: Bitmap, lut: CubeLut, grain: Boolean) {
         val w = bmp.width
         val h = bmp.height
-        val strip = IntArray(w * STRIP_ROWS)
+        val r = detailRadius(w)
+        val block = IntArray(w * (STRIP_ROWS + 2 * r))
         var y = 0
         while (y < h) {
             val rows = minOf(STRIP_ROWS, h - y)
-            bmp.getPixels(strip, 0, w, 0, y, w, rows)
-            val total = w * rows
+            val top = maxOf(0, y - r)                 // 블록의 첫 행(이미지 위쪽 끝에서는 여백이 없다)
+            val bottom = minOf(h, y + rows + r)       // 블록의 끝 행(미포함)
+            val blockRows = bottom - top
+            bmp.getPixels(block, 0, w, 0, top, w, blockRows)
+            val base = BoxBlur.blurArgb(block, w, blockRows, r) // 블러는 원본 블록으로 계산(변환 전)
+            val from0 = (y - top) * w                 // 변환할 가운데 행들의 시작/끝 인덱스
+            val to0 = from0 + rows * w
+            val total = to0 - from0
             val chunk = (total + 3) / 4
             IntStream.range(0, 4).parallel().forEach { c ->
-                val from = c * chunk
-                val to = minOf(total, from + chunk)
+                val from = from0 + c * chunk
+                val to = minOf(to0, from + chunk)
                 if (from < to) {
-                    LutApplier.applyArgb(strip, from, to, lut)
-                    if (grain) Grain.applyArgb(strip, from, to, w, y)
+                    LutApplier.applyDetailSafe(block, base, from, to, lut)
+                    if (grain) Grain.applyArgb(block, from, to, w, top)
                 }
             }
-            bmp.setPixels(strip, 0, w, 0, y, w, rows)
+            bmp.setPixels(block, from0, w, 0, y, w, rows)
             y += rows
         }
     }

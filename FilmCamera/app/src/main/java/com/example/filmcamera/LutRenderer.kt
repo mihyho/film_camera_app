@@ -140,6 +140,7 @@ class LutRenderer(
         GLES30.glUniformMatrix4fv(GLES30.glGetUniformLocation(program, "uTexMatrix"), 1, false, mvp, 0)
         GLES30.glUniform1f(GLES30.glGetUniformLocation(program, "uLutSize"), lut.size.toFloat())
         GLES30.glUniform1f(GLES30.glGetUniformLocation(program, "uLutOn"), if (lutEnabled) 1f else 0f)
+        GLES30.glUniform2f(GLES30.glGetUniformLocation(program, "uTexel"), 1f / bufferW, 1f / bufferH)
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
         GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, camTex)
         GLES30.glUniform1i(GLES30.glGetUniformLocation(program, "uCam"), 0)
@@ -197,7 +198,9 @@ void main() {
     vUv = (uTexMatrix * vec4(aPos * 0.5 + 0.5, 0.0, 1.0)).xy;
 }"""
 
-        // .cube 격자점은 텍셀 중심에 대응하므로 반 텍셀 보정을 해야 33점이 정확히 맞는다
+        // .cube 격자점은 텍셀 중심에 대응하므로 반 텍셀 보정을 해야 33점이 정확히 맞는다.
+        // 색감은 흐린 이미지(상하좌우 5점 평균)에 입히고, 세부/노이즈는 원본 크기를 넘지 못하게 제한한다
+        // (촬영본의 LutApplier.applyDetailSafe 와 같은 방식 -> 색감을 입혀도 노이즈가 늘지 않는다).
         const val FRAGMENT = """#version 300 es
 #extension GL_OES_EGL_image_external_essl3 : require
 precision highp float;
@@ -206,12 +209,22 @@ uniform samplerExternalOES uCam;
 uniform sampler3D uLut;
 uniform float uLutSize;
 uniform float uLutOn;
+uniform vec2 uTexel;
 in vec2 vUv;
 out vec4 outColor;
+vec3 grade(vec3 c) {
+    vec3 p = c * ((uLutSize - 1.0) / uLutSize) + 0.5 / uLutSize;
+    return texture(uLut, p).rgb;
+}
 void main() {
     vec3 c = texture(uCam, vUv).rgb;
-    vec3 p = c * ((uLutSize - 1.0) / uLutSize) + 0.5 / uLutSize;
-    vec3 graded = texture(uLut, p).rgb;
+    vec2 o = uTexel * 1.5;
+    vec3 base = (c
+        + texture(uCam, vUv + vec2(o.x, 0.0)).rgb + texture(uCam, vUv - vec2(o.x, 0.0)).rgb
+        + texture(uCam, vUv + vec2(0.0, o.y)).rgb + texture(uCam, vUv - vec2(0.0, o.y)).rgb) / 5.0;
+    vec3 gb = grade(base);
+    vec3 dIn = c - base;
+    vec3 graded = gb + clamp(grade(c) - gb, -abs(dIn), abs(dIn));
     outColor = vec4(mix(c, graded, uLutOn), 1.0);
 }"""
     }
