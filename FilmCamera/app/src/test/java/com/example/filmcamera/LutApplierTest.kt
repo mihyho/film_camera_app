@@ -7,7 +7,7 @@ import org.junit.Test
 
 class LutApplierTest {
 
-    private val lut = File("src/main/assets/luts/seoul_test.cube").inputStream().use { CubeLut.parse(it) }
+    private val lut = File("src/test/resources/seoul_test.cube").inputStream().use { CubeLut.parse(it) }
 
     @Test
     fun parsesSizeAndCount() {

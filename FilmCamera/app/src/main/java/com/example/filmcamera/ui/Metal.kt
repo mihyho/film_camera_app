@@ -9,9 +9,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import java.util.Random
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
 
 /** 금속 표현에 쓰는 색 */
 object Metal {
@@ -138,8 +135,6 @@ fun DrawScope.drawScrew(center: Offset, radius: Float, angle: Float) {
     }
 }
 
-/** 각도(도) -> 단위 벡터 */
-internal fun unit(deg: Float) = Offset(cos(deg * PI.toFloat() / 180f), sin(deg * PI.toFloat() / 180f))
 
 /** 셔터 링용 은색(크롬) sweep: 결 방향이 있는 금속 반사 */
 fun chromeSweep(center: Offset): Brush = Brush.sweepGradient(

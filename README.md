@@ -31,9 +31,10 @@ FilmCamera/                  안드로이드 앱 (Kotlin + Jetpack Compose + Cam
     data/                    Film/Roll 모델, 롤 잠금 규칙(RollEngine), 상태 저장(StateStore)
     ui/                      Compose 화면(상단/하단 플레이트, 뷰파인더, 서랍, 패널, 질감 효과)
   app/src/main/assets/luts/  필름 LUT(.cube)
-extract_lut.py               보정 전/후 사진 쌍에서 33^3 .cube LUT를 추출하는 스크립트
-design_handoff_phone_film/   디자인 핸드오프(HTML 프로토타입과 명세)
-ios_blueprint/               iOS(HIG 기준) 설계 청사진 — 설계 문서이며 구현은 없습니다
+tools/extract_lut.py         보정 전/후 사진 쌍에서 33^3 .cube LUT를 추출하는 스크립트
+docs/design-handoff/         디자인 핸드오프(HTML 프로토타입과 명세)
+docs/ios-blueprint/          iOS(HIG 기준) 설계 청사진 — 설계 문서이며 구현은 없습니다
+local/                       개인 작업물(보정 전/후 사진, LUT 추출 산출물). git에는 올라가지 않습니다
 ```
 
 ## 빌드와 실행
@@ -61,7 +62,7 @@ Android Studio에서 `FilmCamera` 폴더를 열면 `local.properties`(SDK 경로
 
 ```bash
 pip install numpy pillow scipy
-python extract_lut.py my_film.cube before1.jpg after1.jpg [before2.jpg after2.jpg ...]
+python tools/extract_lut.py my_film.cube before1.jpg after1.jpg [before2.jpg after2.jpg ...]
 ```
 
 - 각 before/after 쌍은 같은 장면, 같은 구도(크롭하지 않은)여야 합니다.

@@ -3,7 +3,7 @@
 
 사용법:
     pip install numpy pillow scipy
-    python extract_lut.py my_film.cube before1.jpg after1.jpg [before2.jpg after2.jpg ...]
+    python tools/extract_lut.py my_film.cube before1.jpg after1.jpg [before2.jpg after2.jpg ...]
 
 각 before / after 쌍은 같은 장면, 같은 구도(크롭 X)여야 합니다.
 장면이 다른 쌍을 여러 개 주면 하나의 LUT로 합칩니다(권장: 하늘/피부/중립색/그림자 포함).

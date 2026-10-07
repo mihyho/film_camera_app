@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import java.util.Random
 import kotlin.math.floor
-import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
 
@@ -133,5 +132,3 @@ fun DrawScope.drawStitching(inset: Float, corner: Float, dashOn: Float, dashOff:
     drawPath(path, Leather.ThreadHi.copy(alpha = .55f), style = Stroke(width * .42f, cap = StrokeCap.Round, pathEffect = dash))
     drawContext.canvas.restore()
 }
-
-internal fun max3(a: Float, b: Float, c: Float) = max(a, max(b, c))
