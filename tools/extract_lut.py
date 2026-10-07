@@ -82,7 +82,11 @@ def _to_srgb(l):
 
 
 def to_oklab(rgb):
-    l = _to_lin(rgb)
+    return lin_to_oklab(_to_lin(rgb))
+
+
+def lin_to_oklab(l):
+    """선형광 RGB(0..1을 넘어도 됨) -> Oklab. 색온도 이득으로 1.0을 넘은 값을 자르지 않고 끝까지 가져가기 위해 분리했다."""
     r, g, b = l[..., 0], l[..., 1], l[..., 2]
     L_ = np.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b)
     M_ = np.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b)
@@ -180,6 +184,120 @@ def kelvin_white_balance(kelvin):
 
 def apply_white_balance(rgb, g):
     return _to_srgb(_to_lin(rgb) * g)
+
+# ───────────── 파라미터로 만드는 룩(사진 쌍을 쓰지 않음) ─────────────
+# 보정 사진에서 학습하면 그 사진의 바램/낮은 대비까지 따라가서 색이 죽을 수 있다. 그래서 원하는 룩을 직접 숫자로 정한다.
+# 순서: 색온도(화이트밸런스) -> RGB 원색 채도 -> 대비 -> 하이라이트 밝기. 모두 Oklab 공간에서 처리한다.
+PRIMARY_HUES = {"red": 29.0, "green": 142.0, "blue": 264.0}  # Oklab 색상각(도)
+HUE_WIDTH = 32.0           # 원색 주변으로 효과가 퍼지는 폭(도, 가우시안 표준편차)
+CONTRAST_PIVOT = 0.60      # 대비 기준 밝기(Oklab L). sRGB 중간 회색이 약 0.6
+HIGHLIGHT_START = (0.50, 0.95)  # 하이라이트로 보는 밝기 구간
+
+
+def _hue_weight(h_deg):
+    """빨강/초록/파랑 원색에 가까울수록 1에 가까운 가중치(각 원색마다 가우시안, 최댓값)."""
+    w = np.zeros_like(h_deg)
+    for c in PRIMARY_HUES.values():
+        d = np.abs((h_deg - c + 180.0) % 360.0 - 180.0)
+        w = np.maximum(w, np.exp(-0.5 * (d / HUE_WIDTH) ** 2))
+    return w
+
+
+def _smoothstep(e0, e1, x):
+    t = np.clip((x - e0) / (e1 - e0), 0, 1)
+    return t * t * (3 - 2 * t)
+
+
+def _fit_gamut(lab):
+    """표현 범위(sRGB)를 벗어난 색은 잘라 내지 않고(색이 뭉개짐) 같은 밝기/색상에서 채도만 줄여 범위 안에 넣는다."""
+    out = lab.copy()
+    L, a, b = lab[:, 0], lab[:, 1], lab[:, 2]
+    def inside(scale):
+        lin = _raw_rgb(np.stack([L, a * scale, b * scale], axis=-1))
+        return np.all((lin >= -1e-4) & (lin <= 1 + 1e-4), axis=-1)
+    ok = inside(np.ones(len(L)))
+    if ok.all():
+        return out
+    lo = np.zeros(len(L)); hi = np.ones(len(L))
+    for _ in range(12):  # 이분법: 범위 안에 들어오는 가장 큰 채도 배율
+        mid = (lo + hi) / 2
+        good = inside(mid)
+        lo = np.where(good, mid, lo); hi = np.where(good, hi, mid)
+    scale = np.where(ok, 1.0, lo)
+    out[:, 1] = a * scale; out[:, 2] = b * scale
+    return out
+
+
+def _raw_rgb(lab):
+    """from_oklab 과 같지만 0..1로 자르지 않은 값(범위 판정용)."""
+    L, a, b = lab[..., 0], lab[..., 1], lab[..., 2]
+    l_ = L + 0.3963377774 * a + 0.2158037573 * b
+    m_ = L - 0.1055613458 * a - 0.0638541728 * b
+    s_ = L - 0.0894841775 * a - 1.2914855480 * b
+    l, m, s = l_ ** 3, m_ ** 3, s_ ** 3
+    lin = np.stack([
+        4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+        -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+        -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s,
+    ], axis=-1)
+    return lin  # 선형광 기준에서 0..1 범위면 sRGB도 0..1
+
+
+def parametric_lut(kelvin=None, sat=0.0, highlights=0.0, contrast=1.0):
+    """파라미터로 룩을 만든 LUT.
+    kelvin: 화이트밸런스 색온도(K). 낮을수록 낮 햇빛 장면이 파랗게 변한다.
+    sat: 빨강/초록/파랑 원색의 채도 증가량(0.25 = +25%, 원색에서 멀수록 효과가 줄어든다).
+    highlights: 하이라이트 밝기 증가 세기(0 = 없음). 가장 밝은 곳(L=1)은 그대로 두어 날아가지 않는다.
+    contrast: 대비 배율(1 = 그대로, 0.93 = 약간 낮춤). 기준은 중간 밝기라 그림자는 조금 뜨고 밝은 곳은 조금 내려간다."""
+    grid = np.stack(np.meshgrid(*[np.linspace(0, 1, N)] * 3, indexing="ij"), axis=-1).reshape(-1, 3)
+    lin = _to_lin(grid)
+    if kelvin:
+        lin = lin * kelvin_white_balance(kelvin)  # 1.0을 넘어도 자르지 않는다(자르면 파랑 채도를 더 올릴 여지가 사라진다)
+    lab = lin_to_oklab(lin)
+    L, a, b = lab[:, 0], lab[:, 1], lab[:, 2]
+    if sat:
+        h = np.degrees(np.arctan2(b, a)) % 360.0
+        k = 1.0 + sat * _hue_weight(h)
+        a, b = a * k, b * k
+    L = CONTRAST_PIVOT + (L - CONTRAST_PIVOT) * contrast
+    if highlights:
+        L = L + highlights * _smoothstep(*HIGHLIGHT_START, L) * (1.0 - L)
+    lab = _fit_gamut(np.stack([L, a, b], axis=-1))
+    return np.clip(from_oklab(lab), 0, 1).reshape(N, N, N, 3).astype(np.float32)
+
+
+# ───────────── 색상 범위 보정(후처리) ─────────────
+GREEN_HUE = 140.0   # Oklab 색상각: 초록 약 140도, 청록(시안) 약 195도. 각도가 커지는 쪽이 청록이다.
+
+
+def read_cube(path):
+    """.cube(R이 가장 빨리 변함) -> [r, g, b, 3]"""
+    rows = [l.split() for l in open(path) if l[0].isdigit() or l[0] == "-"]
+    n = round(len(rows) ** (1 / 3))
+    return np.array(rows, dtype=np.float32).reshape(n, n, n, 3).transpose(2, 1, 0, 3)
+
+
+def hue_tweak_lut(lut, center=GREEN_HUE, width=25.0, sat=0.0, hue_shift=0.0, min_chroma=(0.02, 0.06)):
+    """LUT의 **출력 색**에서 center 색상 주변(가우시안 폭 width도)만 채도를 sat만큼 높이고 색상을 hue_shift도 돌린다.
+    다른 색상은 그대로이고, 채도가 거의 없는 색(회색)도 건드리지 않는다. 표현 범위를 벗어나면 채도를 줄여 넣는다.
+    hue_shift > 0 이면 초록이 청록 쪽으로 간다."""
+    shape = lut.shape
+    lab = to_oklab(lut.reshape(-1, 3).astype(np.float64))
+    L, a, b = lab[:, 0], lab[:, 1], lab[:, 2]
+    C = np.hypot(a, b)
+    h = np.degrees(np.arctan2(b, a)) % 360.0
+    d = np.abs((h - center + 180.0) % 360.0 - 180.0)
+    w = np.exp(-0.5 * (d / width) ** 2) * _smoothstep(min_chroma[0], min_chroma[1], C)
+    C2 = C * (1.0 + sat * w)
+    h2 = np.radians(h + hue_shift * w)
+    lab2 = _fit_gamut(np.stack([L, C2 * np.cos(h2), C2 * np.sin(h2)], axis=-1))
+    return np.clip(from_oklab(lab2), 0, 1).reshape(shape).astype(np.float32)
+
+
+def kelvin_only_lut(kelvin):
+    """색온도만 바꾸는 LUT(대비/채도 유지). parametric_lut 의 특수한 경우."""
+    return parametric_lut(kelvin=kelvin)
+
 
 
 def _smooth_bins(vals, w, sigma=1.2):

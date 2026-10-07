@@ -10,6 +10,10 @@ enum class Film(
     val soft: Long,
     val ink: Long,
     val description: String,
+    /** 명료도: 음수면 가우시안 흐림 효과를 그만큼 섞는다(뚜렷한 경계는 보호). -0.40 = 질감/면에 흐림 40% 혼합(약간) */
+    val clarity: Float = -0.40f,
+    /** 필름 그레인 세기(0~1 진폭 기준). 0.02 = 약하게. 0이면 없음 */
+    val grain: Float = 0.020f,
 ) {
     TUNGSTEN("tungsten", "텅스텐", "TUNGSTEN 320", 320, 0xFF2F5D9E, 0xFFE3ECF8, 0xFF1D3A63, "푸른 그림자, 차갑게 가라앉은 하늘"),
     GOLD("gold", "골드", "GOLD 200", 200, 0xFF8A5A2B, 0xFFF3E9DE, 0xFF55361A, "노랗게 익은 햇빛, 따뜻한 피부톤"),

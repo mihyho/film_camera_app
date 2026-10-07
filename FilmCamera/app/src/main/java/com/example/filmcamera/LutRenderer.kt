@@ -29,8 +29,15 @@ class LutRenderer(
 
     @Volatile private var pendingRequest: SurfaceRequest? = null
     @Volatile private var pendingLut: CubeLut? = null
+    @Volatile private var clarity = 0f
     private var lut: CubeLut = initialLut
     private var lutUploaded = false
+
+    /** 필름의 명료도(국소 대비, 음수면 부드럽게). 필름을 바꿀 때 함께 바꾼다 */
+    fun setClarity(value: Float) {
+        clarity = value
+        glView.requestRender()
+    }
 
     /** 필름 교체: 다음 프레임에 GL 스레드에서 3D 텍스처를 새 LUT로 다시 올린다 */
     fun setLut(newLut: CubeLut) {
@@ -141,6 +148,8 @@ class LutRenderer(
         GLES30.glUniform1f(GLES30.glGetUniformLocation(program, "uLutSize"), lut.size.toFloat())
         GLES30.glUniform1f(GLES30.glGetUniformLocation(program, "uLutOn"), if (lutEnabled) 1f else 0f)
         GLES30.glUniform2f(GLES30.glGetUniformLocation(program, "uTexel"), 1f / bufferW, 1f / bufferH)
+        GLES30.glUniform1f(GLES30.glGetUniformLocation(program, "uClarity"), clarity)
+        GLES30.glUniform1f(GLES30.glGetUniformLocation(program, "uClaritySigma"), Clarity.sigma(bufferW))
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
         GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, camTex)
         GLES30.glUniform1i(GLES30.glGetUniformLocation(program, "uCam"), 0)
@@ -210,6 +219,8 @@ uniform sampler3D uLut;
 uniform float uLutSize;
 uniform float uLutOn;
 uniform vec2 uTexel;
+uniform float uClarity;
+uniform float uClaritySigma;
 in vec2 vUv;
 out vec4 outColor;
 vec3 grade(vec3 c) {
@@ -217,11 +228,30 @@ vec3 grade(vec3 c) {
     return texture(uLut, p).rgb;
 }
 void main() {
-    vec3 c = texture(uCam, vUv).rgb;
+    vec3 c0 = texture(uCam, vUv).rgb;
     vec2 o = uTexel * 1.5;
-    vec3 base = (c
+    // 세부 분리용 흐림(색감을 입힐 때 노이즈가 늘지 않게)은 원본 샘플로 만든다
+    vec3 base = (c0
         + texture(uCam, vUv + vec2(o.x, 0.0)).rgb + texture(uCam, vUv - vec2(o.x, 0.0)).rgb
         + texture(uCam, vUv + vec2(0.0, o.y)).rgb + texture(uCam, vUv - vec2(0.0, o.y)).rgb) / 5.0;
+    // 명료도: 가우시안 흐림을 원본에 섞되 뚜렷한 경계는 보호한다(모든 채널, 모든 밝기). 1-2-1 가중 3x3 샘플을 sigma/0.7071 간격으로 두면
+    // 표준편차가 sigma인 가우시안에 가깝다(촬영본 Clarity.kt와 같은 수식: 결과 = 원본 + (흐림 - 원본) * (-clarity))
+    vec3 c = c0;
+    if (uClarity != 0.0) {
+        vec2 s = uTexel * (uClaritySigma / 0.7071);
+        vec3 blur = (
+            4.0 * c0
+            + 2.0 * (texture(uCam, vUv + vec2(s.x, 0.0)).rgb + texture(uCam, vUv - vec2(s.x, 0.0)).rgb
+                   + texture(uCam, vUv + vec2(0.0, s.y)).rgb + texture(uCam, vUv - vec2(0.0, s.y)).rgb)
+            + texture(uCam, vUv + vec2(s.x, s.y)).rgb + texture(uCam, vUv + vec2(-s.x, s.y)).rgb
+            + texture(uCam, vUv + vec2(s.x, -s.y)).rgb + texture(uCam, vUv + vec2(-s.x, -s.y)).rgb
+        ) / 16.0;
+        // 경계 보호: 원본과 흐림의 밝기 차가 크면(뚜렷한 경계) 흐림을 섞지 않는다(촬영본 Clarity.kt 와 같은 수식)
+        float dy = abs(dot(c0 - blur, vec3(0.299, 0.587, 0.114)));
+        float e = clamp((dy - 0.03) / (0.14 - 0.03), 0.0, 1.0);
+        float w = 1.0 - e * e * (3.0 - 2.0 * e);
+        c = clamp(c0 + (blur - c0) * (-uClarity) * w, 0.0, 1.0);
+    }
     vec3 gb = grade(base);
     vec3 dIn = c - base;
     vec3 graded = gb + clamp(grade(c) - gb, -abs(dIn), abs(dIn));

@@ -11,12 +11,20 @@ android {
         applicationId = "com.example.filmcamera"
         minSdk = 29
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1"
+        versionCode = 4
+        versionName = "0.1.3"
     }
 
     buildFeatures {
         buildConfig = true
+    }
+
+    buildTypes {
+        release {
+            // 개인 설치(사이드로드)용: 로컬 디버그 키로 서명한다. 스토어 배포 전에는 반드시 배포용 키로 바꿀 것.
+            signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = false
+        }
     }
 
     compileOptions {

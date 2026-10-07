@@ -62,7 +62,10 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             // 필름(모드)이 바뀌면 프리뷰 LUT도 교체
-            LaunchedEffect(controller.currentFilm) { renderer.setLut(controller.lutFor(controller.currentFilm)) }
+            LaunchedEffect(controller.currentFilm) {
+                renderer.setLut(controller.lutFor(controller.currentFilm))
+                renderer.setClarity(controller.currentFilm.clarity)
+            }
             CameraScreen(controller, glView, onShutter = ::takePhoto)
         }
 
@@ -130,7 +133,7 @@ class MainActivity : ComponentActivity() {
                 val rotation = image.imageInfo.rotationDegrees
                 image.close()
                 worker.execute {
-                    val result = runCatching { PhotoPipeline.process(applicationContext, bytes, rotation, lut, mode) }
+                    val result = runCatching { PhotoPipeline.process(applicationContext, bytes, rotation, lut, mode, film) }
                     runOnUiThread {
                         if (mode == Mode.FILM) inFlightFilm--
                         result.onSuccess { controller.onPhotoSaved(it, mode, film) }
