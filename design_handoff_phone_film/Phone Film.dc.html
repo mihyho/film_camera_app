@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/organic-0eb6503e-1f3d-4bbe-b2e8-45db0d75639b/styles.css">
+<script src="_ds/organic-0eb6503e-1f3d-4bbe-b2e8-45db0d75639b/_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--color-neutral-200);font-family:var(--font-body)}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 12px}.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:var(--color-text);color:var(--color-bg);border-radius:4px;text-decoration:none}.dv-tname{font:600 14px/1.2 var(--font-body);color:var(--color-text)}.dv-opts{display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:var(--color-text);border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 13px/1.4 var(--font-body);color:var(--color-neutral-800);max-width:412px}.dv-opt:target .dv-oid{background:var(--color-accent);color:var(--color-bg)}.dv-next{margin:24px 0 0;font:13px/1.5 var(--font-body);color:var(--color-neutral-700)}</style>
+</helmet>
+<section class="dv-turn" id="t2">
+  <div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">실버 × 블랙 — 실제 카메라 바디</span></div>
+  <p style="margin:0 0 28px;max-width:760px;font-size:14px;line-height:1.6;color:var(--color-neutral-800);text-wrap:pretty">레퍼런스 카메라를 세로로 세운 구성이에요. 위 실버 탑 플레이트에 프레임 카운터 다이얼 · 모드 레버(FILM / SINGLE) · 필름 서랍, 가운데 블랙 가죽 위에 실버 테두리 뷰파인더, 아래 브라운 베이스에 사진 · 셔터 · 설정. 서랍을 열면 필름 통이 꽂혀 있고, 필름 모드에선 장전된 롤 외엔 잠겨요. 필름 선택 · 현상 · 갤러리 · 설정 화면은 아직 기존 톤이에요.</p>
+  <div class="dv-opts">
+    <div class="dv-opt" id="2a">
+      <div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>실버 바디 · 상단 필름 서랍 + 하단 셔터</div>
+      <x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" dark="{{ true }}" hint-size="412px,892px"><dc-import name="PhoneFilmApp" variant="silver" hint-size="100%,812px" style="height:100%"></dc-import></x-import>
+    </div>
+  </div>
+  <p class="dv-next">다음 시도: "나머지 화면도 실버 × 블랙으로" · "<a class="dv-oid" href="#2a">2a</a>에 <a class="dv-oid" href="#1c">1c</a>의 회전 다이얼 넣기" · "가죽을 브라운으로"</p>
+</section>
+<section class="dv-turn" id="t1">
+  <div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">카메라 화면 3안 (전 화면 동작)</span></div>
+  <p style="margin:0 0 28px;max-width:760px;font-size:14px;line-height:1.6;color:var(--color-neutral-800);text-wrap:pretty">흐름은 같아요: 필름 선택 → 24/36장 → 촬영 → 롤 종료(현상) → 사진 · 설정. <b>필름 모드</b>는 롤이 잠기고 사진은 다 찍은 뒤에만 보여요. <b>단일 촬영</b>은 필름을 자유롭게 바꾸고 바로 확인해요 — 진행 중인 롤은 멈춘 채 유지돼요. 상태는 기기에 저장돼서 새로고침해도 남아요. 설정 → '남은 장 모두 찍기'로 현상 화면을 바로 볼 수 있어요.</p>
+  <div class="dv-opts">
+    <div class="dv-opt" id="1a">
+      <div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>크림 바디 · 숫자 다이얼 카운터</div>
+      <x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" hint-size="412px,892px"><dc-import name="PhoneFilmApp" variant="body" hint-size="100%,812px" style="height:100%"></dc-import></x-import>
+    </div>
+    <div class="dv-opt" id="1b">
+      <div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>어두운 뷰파인더 · 가로 카운터 창</div>
+      <x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" dark="{{ true }}" hint-size="412px,892px"><dc-import name="PhoneFilmApp" variant="dark" hint-size="100%,812px" style="height:100%"></dc-import></x-import>
+    </div>
+    <div class="dv-opt" id="1c">
+      <div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>회전 다이얼 · 단일 모드에선 필름 다이얼</div>
+      <x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" hint-size="412px,892px"><dc-import name="PhoneFilmApp" variant="dial" hint-size="100%,812px" style="height:100%"></dc-import></x-import>
+    </div>
+  </div>
+  <p class="dv-next">다음 시도: "<a class="dv-oid" href="#1a">1a</a> 레이아웃에 <a class="dv-oid" href="#1c">1c</a> 다이얼" · "현상 화면 연출 더 강하게"</p>
+</section>
+</x-dc>
+</body>
+</html>

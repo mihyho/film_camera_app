@@ -1,0 +1,16 @@
+# 빌드 산출물 / IDE
+.gradle/
+build/
+*.iml
+.idea/
+local.properties
+*.apk
+*.aab
+
+# Python
+__pycache__/
+*.pyc
+
+# 개인 사진과 LUT 추출 산출물(앱에는 FilmCamera/app/src/main/assets/luts 의 .cube 를 사용)
+/samples/
+/luts/

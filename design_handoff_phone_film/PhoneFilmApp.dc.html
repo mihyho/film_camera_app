@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-0eb6503e-1f3d-4bbe-b2e8-45db0d75639b/styles.css">
+<script src="_ds/organic-0eb6503e-1f3d-4bbe-b2e8-45db0d75639b/_ds_bundle.js"></script>
+<style>a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}button:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}</style>
+</helmet>
+<div style="--color-accent:#858583;--color-accent-100:#efefee;--color-accent-200:#dcdcda;--color-accent-400:#b0b0ae;--color-accent-600:#6f6f6d;--color-accent-700:#5a5a58;--color-accent-800:#444443;--color-accent-900:#2c2c2b;--pf-grain-light:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27180%27%20height=%27180%27%3E%3Cfilter%20id=%27g%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%27.95%27%20numOctaves=%273%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20values=%270%200%200%200%201%200%200%200%200%20.9%200%200%200%200%20.8%200%200%200%20.16%200%27/%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23g%29%27/%3E%3C/svg%3E);--pf-grain:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27180%27%20height=%27180%27%3E%3Cfilter%20id=%27n%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%27.95%27%20numOctaves=%273%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20values=%270%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20.2%200%27/%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E);--color-bg:#f0f0ee;--color-surface:#f8f8f7;--color-neutral-100:#f6f6f5;--color-neutral-200:#e4e4e2;--color-neutral-300:#acacaa;--color-neutral-400:#949492;--color-neutral-500:#7c7c7a;--color-neutral-600:#646462;--color-neutral-700:#4e4e4c;--color-neutral-800:#383837;position:relative;height:100%;min-height:812px;overflow:hidden;font-family:var(--font-body);color:var(--color-text);background:{{ rootBg }}">
+
+<sc-if value="{{ isSelect }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;padding:var(--space-3) var(--space-4) var(--space-6);box-sizing:border-box;gap:var(--space-4);background:var(--pf-grain),var(--color-bg)">
+  <div style="display:flex;align-items:center;gap:var(--space-2);min-height:48px">
+    <sc-if value="{{ canGoCamera }}" hint-placeholder-val="{{ false }}">
+      <button class="btn btn-ghost btn-icon" onClick="{{ goCamera }}" aria-label="뒤로" style="width:44px;height:44px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+    </sc-if>
+    <div style="font-family:var(--font-heading);font-size:20px;flex:1">phone_film</div>
+    <button class="btn btn-ghost btn-icon" onClick="{{ goGallery }}" aria-label="사진" style="width:44px;height:44px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg></button>
+    <button class="btn btn-ghost btn-icon" onClick="{{ goSettings }}" aria-label="설정" style="width:44px;height:44px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><line x1="21" x2="14" y1="4" y2="4"></line><line x1="10" x2="3" y1="4" y2="4"></line><line x1="21" x2="12" y1="12" y2="12"></line><line x1="8" x2="3" y1="12" y2="12"></line><line x1="21" x2="16" y1="20" y2="20"></line><line x1="12" x2="3" y1="20" y2="20"></line><line x1="14" x2="14" y1="2" y2="6"></line><line x1="8" x2="8" y1="10" y2="14"></line><line x1="16" x2="16" y1="18" y2="22"></line></svg></button>
+  </div>
+  <div style="align-self:flex-start;padding:0 var(--space-1)"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:none"><div style="position:relative;width:104px;height:32px;border-radius:999px;background:#151515;box-shadow:inset 0 2px 4px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.8)"><div style="position:absolute;top:3px;left:3px;width:49px;height:26px;border-radius:999px;background:linear-gradient(180deg,#fafaf8,#b9b9b6);box-shadow:0 1px 3px rgba(0,0,0,.5);transform:translateX({{ leverXs }});transition:transform .25s cubic-bezier(.3,1.3,.5,1)"></div><button onClick="{{ setFilmMode }}" aria-label="필름 모드" style="position:absolute;left:0;top:0;width:52px;height:32px;border:none;background:transparent;cursor:pointer;border-radius:999px"></button><button onClick="{{ setSingleMode }}" aria-label="단일 촬영" style="position:absolute;right:0;top:0;width:52px;height:32px;border:none;background:transparent;cursor:pointer;border-radius:999px"></button></div><div style="width:104px;display:flex;justify-content:space-around;font-size:9px;font-weight:800;letter-spacing:.14em"><span style="color:{{ leverFilmC }}">FILM</span><span style="color:{{ leverSingleC }}">SINGLE</span></div></div></div>
+  <div style="display:flex;flex-direction:column;gap:var(--space-2);padding:0 var(--space-1)">
+    <h1 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:32px;line-height:1.12;text-wrap:pretty">{{ selectTitle }}</h1>
+    <p style="margin:0;font-size:15px;line-height:1.5;color:var(--color-neutral-700);text-wrap:pretty">{{ selectSub }}</p>
+  </div>
+  <div ref="{{ listRef }}" style="display:flex;flex-direction:column;gap:var(--space-3)">
+    <sc-for list="{{ films }}" as="f" hint-placeholder-count="3">
+      <button data-film="{{ f.id }}" onClick="{{ f.onTap }}" style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-4) var(--space-3) var(--space-3);border:2px solid {{ f.border }};border-radius:var(--radius-lg);background:var(--color-surface);text-align:left;font:inherit;color:inherit;cursor:pointer;opacity:{{ f.opacity }}" style-hover="background:var(--color-neutral-200)">
+        <div style="position:relative;width:80px;height:80px;border-radius:50%;overflow:hidden;flex:none">
+          <div style="position:absolute;inset:0;background-image:url(assets/scene.jpg);background-size:cover;background-position:center;filter:{{ f.filter }}"></div>
+          <div style="position:absolute;inset:0;background:{{ f.tint }};mix-blend-mode:soft-light;opacity:{{ f.tintOp }}"></div>
+          <div style="position:absolute;inset:0;background:{{ f.lift }};mix-blend-mode:lighten;opacity:0.22"></div>
+        </div>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+          <div style="display:flex;align-items:center;gap:var(--space-2)">
+            <span style="font-family:var(--font-heading);font-size:22px">{{ f.name }}</span>
+            <sc-if value="{{ f.isLoaded }}" hint-placeholder-val="{{ false }}"><span class="tag" style="background:{{ f.pointBg }};color:{{ f.pointInk }}">{{ f.loadedLabel }}</span></sc-if>
+            <sc-if value="{{ f.isLocked }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-neutral-600)"><rect width="18" height="11" x="3" y="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></sc-if>
+          </div>
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:{{ f.point }}">{{ f.en }}</span>
+          <span style="font-size:13px;line-height:1.45;color:var(--color-neutral-700);text-wrap:pretty">{{ f.desc }}</span>
+        </div>
+      </button>
+    </sc-for>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isLength }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;padding:var(--space-3) var(--space-4) var(--space-6);box-sizing:border-box;gap:var(--space-4);background:var(--pf-grain),var(--color-bg)">
+  <div style="display:flex;align-items:center;min-height:48px">
+    <button class="btn btn-ghost btn-icon" onClick="{{ goSelect }}" aria-label="뒤로" style="width:44px;height:44px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+  </div>
+  <div style="position:relative;width:180px;height:180px;border-radius:50%;overflow:hidden;box-shadow:var(--shadow-md)">
+    <div style="position:absolute;inset:0;background-image:url(assets/scene.jpg);background-size:cover;background-position:center;filter:{{ pf.filter }}"></div>
+    <div style="position:absolute;inset:0;background:{{ pf.tint }};mix-blend-mode:soft-light;opacity:{{ pf.tintOp }}"></div>
+    <div style="position:absolute;inset:0;background:{{ pf.lift }};mix-blend-mode:lighten;opacity:0.22"></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px;padding:0 var(--space-1)">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:{{ pf.point }}">{{ pf.en }}</span>
+    <h1 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:32px;line-height:1.12;text-wrap:pretty">{{ pf.name }}, 몇 장짜리로 넣을까요?</h1>
+  </div>
+  <div style="display:flex;gap:var(--space-3)">
+    <sc-for list="{{ lengths }}" as="l" hint-placeholder-count="2">
+      <button onClick="{{ l.pick }}" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;height:116px;border-radius:var(--radius-lg);border:2px solid {{ l.border }};background:{{ l.bg }};color:{{ l.fg }};font:inherit;cursor:pointer">
+        <span style="font-family:var(--font-heading);font-size:44px;line-height:1">{{ l.n }}</span>
+        <span style="font-size:13px;font-weight:600">{{ l.label }}</span>
+      </button>
+    </sc-for>
+  </div>
+  <div style="display:flex;gap:var(--space-3);align-items:flex-start;padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);background:{{ pf.pointBg }};color:{{ pf.pointInk }}">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px"><rect width="18" height="11" x="3" y="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+    <span style="font-size:14px;line-height:1.5;text-wrap:pretty">{{ pendingLength }}장을 다 찍기 전엔 필름을 바꿀 수 없고, 사진도 다 찍은 뒤에 한꺼번에 현상돼요.</span>
+  </div>
+  <div style="flex:1"></div>
+  <button class="btn btn-primary btn-block" onClick="{{ loadRoll }}" style="height:56px;font-size:16px;background:{{ pf.point }}">필름 장전하기</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCamA }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;padding:var(--space-3) var(--space-4) var(--space-6);box-sizing:border-box;gap:var(--space-3);background:var(--pf-grain),var(--color-bg)">
+  <div style="display:flex;align-items:center;gap:var(--space-2);min-height:48px">
+    <button onClick="{{ goSelect }}" style="display:flex;align-items:center;gap:8px;height:44px;padding:0 16px 0 8px;border:none;border-radius:999px;background:var(--color-surface);font:inherit;font-weight:600;font-size:14px;color:inherit;cursor:pointer" style-hover="background:var(--color-neutral-200)">
+      <span style="width:28px;height:28px;border-radius:50%;background:{{ cf.tint }};display:flex;align-items:center;justify-content:center;color:var(--color-bg)">
+        <sc-if value="{{ isFilmMode }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></sc-if>
+      </span>
+      {{ chipLabel }}
+    </button>
+    <div style="flex:1"></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:none"><div style="position:relative;width:104px;height:32px;border-radius:999px;background:#151515;box-shadow:inset 0 2px 4px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.8)"><div style="position:absolute;top:3px;left:3px;width:49px;height:26px;border-radius:999px;background:linear-gradient(180deg,#fafaf8,#b9b9b6);box-shadow:0 1px 3px rgba(0,0,0,.5);transform:translateX({{ leverXs }});transition:transform .25s cubic-bezier(.3,1.3,.5,1)"></div><button onClick="{{ setFilmMode }}" aria-label="필름 모드" style="position:absolute;left:0;top:0;width:52px;height:32px;border:none;background:transparent;cursor:pointer;border-radius:999px"></button><button onClick="{{ setSingleMode }}" aria-label="단일 촬영" style="position:absolute;right:0;top:0;width:52px;height:32px;border:none;background:transparent;cursor:pointer;border-radius:999px"></button></div><div style="width:104px;display:flex;justify-content:space-around;font-size:9px;font-weight:800;letter-spacing:.14em"><span style="color:{{ leverFilmC }}">FILM</span><span style="color:{{ leverSingleC }}">SINGLE</span></div></div>
+    <button class="btn btn-ghost btn-icon" onClick="{{ goSettings }}" aria-label="설정" style="width:44px;height:44px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><line x1="21" x2="14" y1="4" y2="4"></line><line x1="10" x2="3" y1="4" y2="4"></line><line x1="21" x2="12" y1="12" y2="12"></line><line x1="8" x2="3" y1="12" y2="12"></line><line x1="21" x2="16" y1="20" y2="20"></line><line x1="12" x2="3" y1="20" y2="20"></line><line x1="14" x2="14" y1="2" y2="6"></line><line x1="8" x2="8" y1="10" y2="14"></line><line x1="16" x2="16" y1="18" y2="22"></line></svg></button>
+  </div>
+  <div style="position:relative;width:100%;aspect-ratio:3/4;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md)">
+    <div ref="{{ panRef }}" style="position:absolute;inset:-6%;background-image:url(assets/scene.jpg);background-size:cover;background-position:50% 50%;filter:{{ cf.filter }}"></div>
+    <div style="position:absolute;inset:0;background:{{ cf.tint }};mix-blend-mode:soft-light;opacity:{{ cf.tintOp }}"></div>
+    <div style="position:absolute;inset:0;background:{{ cf.lift }};mix-blend-mode:lighten;opacity:0.22"></div>
+    <sc-if value="{{ gridOn }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;background-image:linear-gradient(90deg,transparent calc(33.33% - 1px),rgba(255,255,255,.45) 33.33%,transparent calc(33.33% + 1px),transparent calc(66.66% - 1px),rgba(255,255,255,.45) 66.66%,transparent calc(66.66% + 1px)),linear-gradient(0deg,transparent calc(33.33% - 1px),rgba(255,255,255,.45) 33.33%,transparent calc(33.33% + 1px),transparent calc(66.66% - 1px),rgba(255,255,255,.45) 66.66%,transparent calc(66.66% + 1px))"></div></sc-if>
+    <sc-if value="{{ stampOn }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:18px;bottom:14px;font-family:ui-monospace,Menlo,monospace;font-size:15px;font-weight:700;color:var(--color-accent-400);letter-spacing:0.08em;white-space:nowrap">{{ stamp }}</span></sc-if>
+    
+    <sc-if value="{{ noFilm }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:16px;box-sizing:border-box;background:rgba(18,18,18,.62);backdrop-filter:blur(3px)">
+      <span style="font-size:11px;font-weight:800;letter-spacing:.2em;color:#f0f0ee">NO FILM · 필름을 골라 넣어 주세요</span>
+      <button onClick="{{ openDrawer }}" aria-label="필름 서랍 열기" style="display:flex;align-items:center;gap:10px;height:50px;padding:0 18px 0 11px;border:none;border-radius:16px;cursor:pointer;background:linear-gradient(180deg,#f7f7f5,#c4c4c1);box-shadow:0 2px 0 #8a8a87,0 4px 8px rgba(0,0,0,.3),inset 0 1px 0 #fff;font:inherit;flex:none;transition:transform .1s" style-active="transform:translateY(2px)"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="flex:none"><path d="M12.8 7.3h1.3v-.7h8.3v8.6h-2.5a1.6 1.6 0 0 0-1.6 1.6v1.6h-4.2v-.8h-1.3" fill="#f7f7f5"></path><rect x="2.3" y="6.4" width="10.5" height="11.2" fill="{{ dbPoint }}"></rect><rect x="5.2" y="1.6" width="4.6" height="2.6" rx=".8" fill="#f7f7f5"></rect><rect x="1.5" y="4.2" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><rect x="1.5" y="17.4" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><path d="M4.2 6.6v10.8"></path><rect x="9.1" y="8.2" width="1.9" height="7.6" rx=".95" fill="#f7f7f5"></rect><rect x="15.4" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="17.6" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="19.8" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="15.4" y="16.2" width="1.1" height="1.2" rx=".3"></rect></svg><span style="display:flex;flex-direction:column;align-items:flex-start;gap:4px"><span style="font-size:13px;font-weight:800;color:#1a1a1a;white-space:nowrap">{{ dbName }}</span><span style="width:44px;height:5px;border-radius:999px;background:#2a2a28;box-shadow:inset 0 1px 2px rgba(0,0,0,.6),0 1px 0 #fff"></span></span></button>
+      <div style="display:flex;padding:3px;border-radius:999px;background:rgba(255,255,255,.12);gap:2px">
+        <sc-for list="{{ inLengths }}" as="l" hint-placeholder-count="2"><button onClick="{{ l.pick }}" style="height:36px;padding:0 18px;border:none;border-radius:999px;background:{{ l.bg }};color:{{ l.fg }};font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">{{ l.n }}장</button></sc-for>
+      </div>
+      <button onClick="{{ loadRoll }}" disabled="{{ cantLoad }}" style="height:46px;padding:0 24px;border:none;border-radius:999px;background:{{ loadBg }};color:#fff;font:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.4);white-space:nowrap;transition:background .2s" style-active="transform:scale(.96)">{{ loadLabel }}</button>
+      <span style="font-size:11px;color:#c9c9c6;text-align:center;text-wrap:pretty">넣으면 다 찍을 때까지 바꿀 수 없고, 사진은 롤이 끝나면 현상돼요</span>
+    </div></sc-if>
+    <div ref="{{ flashRef }}" style="position:absolute;inset:0;background:var(--color-bg);opacity:0;pointer-events:none"></div>
+  </div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-2)">
+    <button onClick="{{ goGallery }}" aria-label="사진" style="position:relative;width:60px;height:60px;border-radius:50%;overflow:hidden;border:3px solid var(--color-surface);padding:0;background:var(--color-neutral-200);cursor:pointer;display:flex;align-items:center;justify-content:center">
+      <sc-if value="{{ showCanister }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;align-items:center;line-height:1"><span style="font-family:var(--font-heading);font-size:20px;color:var(--color-text)">{{ shotCount }}</span><span style="font-size:9px;font-weight:700;color:var(--color-neutral-700)">현상 전</span></div>
+      </sc-if>
+      <sc-if value="{{ hasLast }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;background-image:url(assets/scene.jpg);background-size:{{ last.bgSize }};background-position:{{ last.bgPos }};filter:{{ last.filter }}"></div>
+        <div style="position:absolute;inset:0;background:{{ last.tint }};mix-blend-mode:soft-light;opacity:{{ last.tintOp }}"></div>
+      </sc-if>
+    </button>
+    <button onClick="{{ shoot }}" aria-label="셔터" style="width:92px;height:92px;border-radius:50%;border:6px solid var(--color-accent-200);background:var(--color-accent);box-shadow:var(--shadow-md);cursor:pointer;transition:transform .12s" style-hover="background:var(--color-accent-600)" style-active="transform:scale(0.92)"></button>
+    <sc-if value="{{ isFilmMode }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;width:64px">
+        <div style="position:relative;width:60px;height:60px;border-radius:50%;overflow:hidden;background:var(--color-text);box-shadow:inset 0 3px 8px rgba(0,0,0,.5)">
+          <div style="position:absolute;left:0;right:0;top:0;transform:translateY({{ stripY }});transition:transform .55s cubic-bezier(.3,1.4,.5,1)">
+            <sc-for list="{{ strip }}" as="s" hint-placeholder-count="3">
+              <div style="height:60px;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:26px;color:var(--color-bg)">{{ s.n }}</div>
+            </sc-for>
+          </div>
+          <div style="position:absolute;left:50%;top:4px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--color-accent)"></div>
+        </div>
+        <span style="font-size:11px;font-weight:700;color:var(--color-neutral-700)">남은 장수</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isSingleMode }}" hint-placeholder-val="{{ false }}"><div style="width:64px"></div></sc-if>
+  </div>
+  <sc-if value="{{ isSingleMode }}" hint-placeholder-val="{{ false }}"><div style="display:flex;justify-content:center;gap:22px"><button onClick="{{ openDrawer }}" aria-label="필름 서랍 열기" style="display:flex;align-items:center;gap:10px;height:50px;padding:0 18px 0 11px;border:none;border-radius:16px;cursor:pointer;background:linear-gradient(180deg,#f7f7f5,#c4c4c1);box-shadow:0 2px 0 #8a8a87,0 4px 8px rgba(0,0,0,.3),inset 0 1px 0 #fff;font:inherit;flex:none;transition:transform .1s" style-active="transform:translateY(2px)"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="flex:none"><path d="M12.8 7.3h1.3v-.7h8.3v8.6h-2.5a1.6 1.6 0 0 0-1.6 1.6v1.6h-4.2v-.8h-1.3" fill="#f7f7f5"></path><rect x="2.3" y="6.4" width="10.5" height="11.2" fill="{{ dbPoint }}"></rect><rect x="5.2" y="1.6" width="4.6" height="2.6" rx=".8" fill="#f7f7f5"></rect><rect x="1.5" y="4.2" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><rect x="1.5" y="17.4" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><path d="M4.2 6.6v10.8"></path><rect x="9.1" y="8.2" width="1.9" height="7.6" rx=".95" fill="#f7f7f5"></rect><rect x="15.4" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="17.6" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="19.8" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="15.4" y="16.2" width="1.1" height="1.2" rx=".3"></rect></svg><span style="display:flex;flex-direction:column;align-items:flex-start;gap:4px"><span style="font-size:13px;font-weight:800;color:#1a1a1a;white-space:nowrap">{{ dbName }}</span><span style="width:44px;height:5px;border-radius:999px;background:#2a2a28;box-shadow:inset 0 1px 2px rgba(0,0,0,.6),0 1px 0 #fff"></span></span></button></div></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCamB }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;background:var(--color-text);color:var(--color-bg)">
+  <div style="position:relative;width:100%;aspect-ratio:3/4;border-radius:0 0 var(--radius-lg) var(--radius-lg);overflow:hidden">
+    <div ref="{{ panRef }}" style="position:absolute;inset:-6%;background-image:url(assets/scene.jpg);background-size:cover;background-position:50% 50%;filter:{{ cf.filter }}"></div>
+    <div style="position:absolute;inset:0;background:{{ cf.tint }};mix-blend-mode:soft-light;opacity:{{ cf.tintOp }}"></div>
+    <div style="position:absolute;inset:0;background:{{ cf.lift }};mix-blend-mode:lighten;opacity:0.22"></div>
+    <sc-if value="{{ gridOn }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;background-image:linear-gradient(90deg,transparent calc(33.33% - 1px),rgba(255,255,255,.45) 33.33%,transparent calc(33.33% + 1px),transparent calc(66.66% - 1px),rgba(255,255,255,.45) 66.66%,transparent calc(66.66% + 1px)),linear-gradient(0deg,transparent calc(33.33% - 1px),rgba(255,255,255,.45) 33.33%,transparent calc(33.33% + 1px),transparent calc(66.66% - 1px),rgba(255,255,255,.45) 66.66%,transparent calc(66.66% + 1px))"></div></sc-if>
+    <sc-if value="{{ stampOn }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:18px;bottom:16px;font-family:ui-monospace,Menlo,monospace;font-size:15px;font-weight:700;color:var(--color-accent-400);letter-spacing:0.08em;white-space:nowrap">{{ stamp }}</span></sc-if>
+    <sc-if value="{{ isFilmMode }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;top:14px;left:50%;margin-left:-66px;width:132px;height:44px;border-radius:999px;overflow:hidden;background:var(--color-text);box-shadow:var(--shadow-md)">
+        <div style="position:absolute;top:0;left:0;height:44px;display:flex;transform:translateX({{ stripX }});transition:transform .55s cubic-bezier(.3,1.4,.5,1)">
+          <sc-for list="{{ strip }}" as="s" hint-placeholder-count="3">
+            <div style="width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:22px;color:{{ s.color }}">{{ s.n }}</div>
+          </sc-for>
+        </div>
+        <div style="position:absolute;left:50%;bottom:4px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--color-accent)"></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ noFilm }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:16px;box-sizing:border-box;background:rgba(18,18,18,.62);backdrop-filter:blur(3px)">
+      <span style="font-size:11px;font-weight:800;letter-spacing:.2em;color:#f0f0ee">NO FILM · 필름을 골라 넣어 주세요</span>
+      <button onClick="{{ openDrawer }}" aria-label="필름 서랍 열기" style="display:flex;align-items:center;gap:10px;height:50px;padding:0 18px 0 11px;border:none;border-radius:16px;cursor:pointer;background:linear-gradient(180deg,#f7f7f5,#c4c4c1);box-shadow:0 2px 0 #8a8a87,0 4px 8px rgba(0,0,0,.3),inset 0 1px 0 #fff;font:inherit;flex:none;transition:transform .1s" style-active="transform:translateY(2px)"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="flex:none"><path d="M12.8 7.3h1.3v-.7h8.3v8.6h-2.5a1.6 1.6 0 0 0-1.6 1.6v1.6h-4.2v-.8h-1.3" fill="#f7f7f5"></path><rect x="2.3" y="6.4" width="10.5" height="11.2" fill="{{ dbPoint }}"></rect><rect x="5.2" y="1.6" width="4.6" height="2.6" rx=".8" fill="#f7f7f5"></rect><rect x="1.5" y="4.2" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><rect x="1.5" y="17.4" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><path d="M4.2 6.6v10.8"></path><rect x="9.1" y="8.2" width="1.9" height="7.6" rx=".95" fill="#f7f7f5"></rect><rect x="15.4" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="17.6" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="19.8" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="15.4" y="16.2" width="1.1" height="1.2" rx=".3"></rect></svg><span style="display:flex;flex-direction:column;align-items:flex-start;gap:4px"><span style="font-size:13px;font-weight:800;color:#1a1a1a;white-space:nowrap">{{ dbName }}</span><span style="width:44px;height:5px;border-radius:999px;background:#2a2a28;box-shadow:inset 0 1px 2px rgba(0,0,0,.6),0 1px 0 #fff"></span></span></button>
+      <div style="display:flex;padding:3px;border-radius:999px;background:rgba(255,255,255,.12);gap:2px">
+        <sc-for list="{{ inLengths }}" as="l" hint-placeholder-count="2"><button onClick="{{ l.pick }}" style="height:36px;padding:0 18px;border:none;border-radius:999px;background:{{ l.bg }};color:{{ l.fg }};font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">{{ l.n }}장</button></sc-for>
+      </div>
+      <button onClick="{{ loadRoll }}" disabled="{{ cantLoad }}" style="height:46px;padding:0 24px;border:none;border-radius:999px;background:{{ loadBg }};color:#fff;font:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.4);white-space:nowrap;transition:background .2s" style-active="transform:scale(.96)">{{ loadLabel }}</button>
+      <span style="font-size:11px;color:#c9c9c6;text-align:center;text-wrap:pretty">넣으면 다 찍을 때까지 바꿀 수 없고, 사진은 롤이 끝나면 현상돼요</span>
+    </div></sc-if>
+    <div ref="{{ flashRef }}" style="position:absolute;inset:0;background:var(--color-bg);opacity:0;pointer-events:none"></div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);padding:var(--space-4) var(--space-4) 0">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:none"><div style="position:relative;width:104px;height:32px;border-radius:999px;background:#151515;box-shadow:inset 0 2px 4px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.8)"><div style="position:absolute;top:3px;left:3px;width:49px;height:26px;border-radius:999px;background:linear-gradient(180deg,#fafaf8,#b9b9b6);box-shadow:0 1px 3px rgba(0,0,0,.5);transform:translateX({{ leverXs }});transition:transform .25s cubic-bezier(.3,1.3,.5,1)"></div><button onClick="{{ setFilmMode }}" aria-label="필름 모드" style="position:absolute;left:0;top:0;width:52px;height:32px;border:none;background:transparent;cursor:pointer;border-radius:999px"></button><button onClick="{{ setSingleMode }}" aria-label="단일 촬영" style="position:absolute;right:0;top:0;width:52px;height:32px;border:none;background:transparent;cursor:pointer;border-radius:999px"></button></div><div style="width:104px;display:flex;justify-content:space-around;font-size:9px;font-weight:800;letter-spacing:.14em"><span style="color:{{ leverFilmCD }}">FILM</span><span style="color:{{ leverSingleCD }}">SINGLE</span></div></div>
+    <button onClick="{{ goSelect }}" style="display:flex;align-items:center;gap:8px;height:42px;padding:0 14px 0 8px;border:none;border-radius:999px;background:rgba(245,234,216,.1);font:inherit;font-weight:700;font-size:12px;letter-spacing:0.08em;color:var(--color-bg);cursor:pointer" style-hover="background:rgba(245,234,216,.18)">
+      <span style="width:26px;height:26px;border-radius:50%;background:{{ cf.tint }}"></span>
+      {{ cf.en }}
+    </button>
+  </div>
+  <div style="padding:var(--space-2) var(--space-4) 0;font-size:13px;color:var(--color-neutral-300)">{{ camStatus }}</div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-6)">
+    <button onClick="{{ goGallery }}" aria-label="사진" style="position:relative;width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(245,234,216,.4);padding:0;background:rgba(245,234,216,.08);cursor:pointer;color:var(--color-bg);display:flex;align-items:center;justify-content:center">
+      <sc-if value="{{ showCanister }}" hint-placeholder-val="{{ false }}"><span style="font-family:var(--font-heading);font-size:20px">{{ shotCount }}</span></sc-if>
+      <sc-if value="{{ hasLast }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;background-image:url(assets/scene.jpg);background-size:{{ last.bgSize }};background-position:{{ last.bgPos }};filter:{{ last.filter }}"></div>
+        <div style="position:absolute;inset:0;background:{{ last.tint }};mix-blend-mode:soft-light;opacity:{{ last.tintOp }}"></div>
+      </sc-if>
+    </button>
+    <button onClick="{{ shoot }}" aria-label="셔터" style="width:84px;height:84px;border-radius:50%;border:5px solid var(--color-bg);background:transparent;padding:5px;cursor:pointer;transition:transform .12s" style-active="transform:scale(0.92)"><span style="display:block;width:100%;height:100%;border-radius:50%;background:var(--color-accent)"></span></button>
+    <button onClick="{{ goSettings }}" aria-label="설정" style="width:54px;height:54px;border-radius:50%;border:none;background:rgba(245,234,216,.1);color:var(--color-bg);display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="background:rgba(245,234,216,.18)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><line x1="21" x2="14" y1="4" y2="4"></line><line x1="10" x2="3" y1="4" y2="4"></line><line x1="21" x2="12" y1="12" y2="12"></line><line x1="8" x2="3" y1="12" y2="12"></line><line x1="21" x2="16" y1="20" y2="20"></line><line x1="12" x2="3" y1="20" y2="20"></line><line x1="14" x2="14" y1="2" y2="6"></line><line x1="8" x2="8" y1="10" y2="14"></line><line x1="16" x2="16" y1="18" y2="22"></line></svg></button>
+  </div>
+  <sc-if value="{{ isSingleMode }}" hint-placeholder-val="{{ false }}"><div style="display:flex;justify-content:center;gap:22px;padding:0 0 var(--space-6)"><button onClick="{{ openDrawer }}" aria-label="필름 서랍 열기" style="display:flex;align-items:center;gap:10px;height:50px;padding:0 18px 0 11px;border:none;border-radius:16px;cursor:pointer;background:linear-gradient(180deg,#f7f7f5,#c4c4c1);box-shadow:0 2px 0 #8a8a87,0 4px 8px rgba(0,0,0,.3),inset 0 1px 0 #fff;font:inherit;flex:none;transition:transform .1s" style-active="transform:translateY(2px)"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="flex:none"><path d="M12.8 7.3h1.3v-.7h8.3v8.6h-2.5a1.6 1.6 0 0 0-1.6 1.6v1.6h-4.2v-.8h-1.3" fill="#f7f7f5"></path><rect x="2.3" y="6.4" width="10.5" height="11.2" fill="{{ dbPoint }}"></rect><rect x="5.2" y="1.6" width="4.6" height="2.6" rx=".8" fill="#f7f7f5"></rect><rect x="1.5" y="4.2" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><rect x="1.5" y="17.4" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><path d="M4.2 6.6v10.8"></path><rect x="9.1" y="8.2" width="1.9" height="7.6" rx=".95" fill="#f7f7f5"></rect><rect x="15.4" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="17.6" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="19.8" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="15.4" y="16.2" width="1.1" height="1.2" rx=".3"></rect></svg><span style="display:flex;flex-direction:column;align-items:flex-start;gap:4px"><span style="font-size:13px;font-weight:800;color:#1a1a1a;white-space:nowrap">{{ dbName }}</span><span style="width:44px;height:5px;border-radius:999px;background:#2a2a28;box-shadow:inset 0 1px 2px rgba(0,0,0,.6),0 1px 0 #fff"></span></span></button></div></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCamC }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;padding:var(--space-3) var(--space-4) 0;box-sizing:border-box;gap:var(--space-3);background:var(--pf-grain),var(--color-bg)">
+  <div style="display:flex;align-items:center;gap:var(--space-2);min-height:48px">
+    <button onClick="{{ goSelect }}" style="display:flex;flex-direction:column;align-items:flex-start;padding:4px 10px;border:none;border-radius:var(--radius-md);background:transparent;font:inherit;color:inherit;cursor:pointer;text-align:left" style-hover="background:var(--color-surface)">
+      <span style="font-family:var(--font-heading);font-size:22px;line-height:1.1">{{ cf.name }}</span>
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--color-accent-700);white-space:nowrap">{{ chipSub }}</span>
+    </button>
+    <div style="flex:1"></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:none"><div style="position:relative;width:104px;height:32px;border-radius:999px;background:#151515;box-shadow:inset 0 2px 4px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.8)"><div style="position:absolute;top:3px;left:3px;width:49px;height:26px;border-radius:999px;background:linear-gradient(180deg,#fafaf8,#b9b9b6);box-shadow:0 1px 3px rgba(0,0,0,.5);transform:translateX({{ leverXs }});transition:transform .25s cubic-bezier(.3,1.3,.5,1)"></div><button onClick="{{ setFilmMode }}" aria-label="필름 모드" style="position:absolute;left:0;top:0;width:52px;height:32px;border:none;background:transparent;cursor:pointer;border-radius:999px"></button><button onClick="{{ setSingleMode }}" aria-label="단일 촬영" style="position:absolute;right:0;top:0;width:52px;height:32px;border:none;background:transparent;cursor:pointer;border-radius:999px"></button></div><div style="width:104px;display:flex;justify-content:space-around;font-size:9px;font-weight:800;letter-spacing:.14em"><span style="color:{{ leverFilmC }}">FILM</span><span style="color:{{ leverSingleC }}">SINGLE</span></div></div>
+    <button class="btn btn-ghost btn-icon" onClick="{{ goGallery }}" aria-label="사진" style="width:44px;height:44px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg></button>
+    <button class="btn btn-ghost btn-icon" onClick="{{ goSettings }}" aria-label="설정" style="width:44px;height:44px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><line x1="21" x2="14" y1="4" y2="4"></line><line x1="10" x2="3" y1="4" y2="4"></line><line x1="21" x2="12" y1="12" y2="12"></line><line x1="8" x2="3" y1="12" y2="12"></line><line x1="21" x2="16" y1="20" y2="20"></line><line x1="12" x2="3" y1="20" y2="20"></line><line x1="14" x2="14" y1="2" y2="6"></line><line x1="8" x2="8" y1="10" y2="14"></line><line x1="16" x2="16" y1="18" y2="22"></line></svg></button>
+  </div>
+  <div style="position:relative;width:100%;aspect-ratio:4/5;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md)">
+    <div ref="{{ panRef }}" style="position:absolute;inset:-6%;background-image:url(assets/scene.jpg);background-size:cover;background-position:50% 50%;filter:{{ cf.filter }}"></div>
+    <div style="position:absolute;inset:0;background:{{ cf.tint }};mix-blend-mode:soft-light;opacity:{{ cf.tintOp }}"></div>
+    <div style="position:absolute;inset:0;background:{{ cf.lift }};mix-blend-mode:lighten;opacity:0.22"></div>
+    <sc-if value="{{ gridOn }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;background-image:linear-gradient(90deg,transparent calc(33.33% - 1px),rgba(255,255,255,.45) 33.33%,transparent calc(33.33% + 1px),transparent calc(66.66% - 1px),rgba(255,255,255,.45) 66.66%,transparent calc(66.66% + 1px)),linear-gradient(0deg,transparent calc(33.33% - 1px),rgba(255,255,255,.45) 33.33%,transparent calc(33.33% + 1px),transparent calc(66.66% - 1px),rgba(255,255,255,.45) 66.66%,transparent calc(66.66% + 1px))"></div></sc-if>
+    <sc-if value="{{ stampOn }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:18px;bottom:14px;font-family:ui-monospace,Menlo,monospace;font-size:15px;font-weight:700;color:var(--color-accent-400);letter-spacing:0.08em;white-space:nowrap">{{ stamp }}</span></sc-if>
+    
+    <sc-if value="{{ showCanister }}" hint-placeholder-val="{{ false }}"><button onClick="{{ goGallery }}" style="position:absolute;top:12px;right:12px;height:38px;padding:0 12px;border:none;border-radius:999px;background:rgba(32,30,29,.45);color:var(--color-bg);font:inherit;font-size:12px;font-weight:700;cursor:pointer">{{ shotCount }}장 현상 대기</button></sc-if>
+    <sc-if value="{{ noFilm }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:16px;box-sizing:border-box;background:rgba(18,18,18,.62);backdrop-filter:blur(3px)">
+      <span style="font-size:11px;font-weight:800;letter-spacing:.2em;color:#f0f0ee">NO FILM · 필름을 골라 넣어 주세요</span>
+      <button onClick="{{ openDrawer }}" aria-label="필름 서랍 열기" style="display:flex;align-items:center;gap:10px;height:50px;padding:0 18px 0 11px;border:none;border-radius:16px;cursor:pointer;background:linear-gradient(180deg,#f7f7f5,#c4c4c1);box-shadow:0 2px 0 #8a8a87,0 4px 8px rgba(0,0,0,.3),inset 0 1px 0 #fff;font:inherit;flex:none;transition:transform .1s" style-active="transform:translateY(2px)"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="flex:none"><path d="M12.8 7.3h1.3v-.7h8.3v8.6h-2.5a1.6 1.6 0 0 0-1.6 1.6v1.6h-4.2v-.8h-1.3" fill="#f7f7f5"></path><rect x="2.3" y="6.4" width="10.5" height="11.2" fill="{{ dbPoint }}"></rect><rect x="5.2" y="1.6" width="4.6" height="2.6" rx=".8" fill="#f7f7f5"></rect><rect x="1.5" y="4.2" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><rect x="1.5" y="17.4" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><path d="M4.2 6.6v10.8"></path><rect x="9.1" y="8.2" width="1.9" height="7.6" rx=".95" fill="#f7f7f5"></rect><rect x="15.4" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="17.6" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="19.8" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="15.4" y="16.2" width="1.1" height="1.2" rx=".3"></rect></svg><span style="display:flex;flex-direction:column;align-items:flex-start;gap:4px"><span style="font-size:13px;font-weight:800;color:#1a1a1a;white-space:nowrap">{{ dbName }}</span><span style="width:44px;height:5px;border-radius:999px;background:#2a2a28;box-shadow:inset 0 1px 2px rgba(0,0,0,.6),0 1px 0 #fff"></span></span></button>
+      <div style="display:flex;padding:3px;border-radius:999px;background:rgba(255,255,255,.12);gap:2px">
+        <sc-for list="{{ inLengths }}" as="l" hint-placeholder-count="2"><button onClick="{{ l.pick }}" style="height:36px;padding:0 18px;border:none;border-radius:999px;background:{{ l.bg }};color:{{ l.fg }};font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">{{ l.n }}장</button></sc-for>
+      </div>
+      <button onClick="{{ loadRoll }}" disabled="{{ cantLoad }}" style="height:46px;padding:0 24px;border:none;border-radius:999px;background:{{ loadBg }};color:#fff;font:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.4);white-space:nowrap;transition:background .2s" style-active="transform:scale(.96)">{{ loadLabel }}</button>
+      <span style="font-size:11px;color:#c9c9c6;text-align:center;text-wrap:pretty">넣으면 다 찍을 때까지 바꿀 수 없고, 사진은 롤이 끝나면 현상돼요</span>
+    </div></sc-if>
+    <div ref="{{ flashRef }}" style="position:absolute;inset:0;background:var(--color-bg);opacity:0;pointer-events:none"></div>
+  </div>
+  <div style="position:relative;flex:1;min-height:210px;overflow:hidden;margin:0 calc(-1 * var(--space-4))">
+    <div style="position:absolute;left:50%;top:26px;width:380px;height:380px;margin-left:-190px;border-radius:50%;background:var(--color-surface);box-shadow:var(--shadow-sm)">
+      <div style="position:absolute;inset:0;transform:rotate({{ discDeg }}deg);transition:transform .7s cubic-bezier(.3,1.3,.5,1)">
+        <sc-for list="{{ ticks }}" as="t" hint-placeholder-count="12">
+          <div style="position:absolute;left:50%;top:0;width:0;height:50%;transform-origin:50% 100%;transform:rotate({{ t.deg }}deg)">
+            <button onClick="{{ t.onTap }}" style="position:absolute;top:8px;left:0;transform:translateX(-50%);border:none;background:transparent;padding:2px 4px;font-family:var(--font-heading);font-size:{{ t.size }};color:{{ t.color }};white-space:nowrap;cursor:{{ t.cursor }}">{{ t.n }}</button>
+          </div>
+        </sc-for>
+      </div>
+      <div style="position:absolute;left:50%;top:-12px;margin-left:-8px;width:16px;height:16px;border-radius:50%;background:var(--color-accent);border:3px solid var(--color-bg)"></div>
+      <button onClick="{{ shoot }}" aria-label="셔터" style="position:absolute;left:50%;top:72px;width:96px;height:96px;margin-left:-48px;border-radius:50%;border:none;background:var(--color-accent-2);box-shadow:var(--shadow-md),inset 0 -4px 0 var(--color-accent-2-700);cursor:pointer;transition:transform .12s" style-hover="background:var(--color-accent-2-600)" style-active="transform:scale(0.92)"></button>
+      <span style="position:absolute;left:0;right:0;top:178px;text-align:center;font-size:12px;font-weight:700;color:var(--color-neutral-700)">{{ dialHint }}</span>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCamD }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;background:#141414">
+  <div style="position:relative;height:156px;flex:none;display:flex;align-items:center;gap:18px;padding:0 22px;background:#d4d4d1;box-shadow:inset 0 -2px 0 #9a9a97,0 2px 0 #0b0b0b">
+    <div style="position:relative;width:92px;height:92px;border-radius:50%;flex:none;background:repeating-conic-gradient(#7d7d7a 0 3deg,#f2f2f0 3deg 6deg);box-shadow:0 4px 8px rgba(0,0,0,.35)">
+      <div style="position:absolute;inset:7px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffffff,#d2d2cf 45%,#9a9a97 100%);box-shadow:inset 0 1px 2px rgba(255,255,255,.9),inset 0 -2px 4px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center">
+        <div style="position:relative;width:46px;height:32px;border-radius:7px;background:#0d0d0d;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.7)">
+          <sc-if value="{{ isFilmMode }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;left:0;right:0;top:0;transform:translateY({{ stripY30 }});transition:transform .55s cubic-bezier(.3,1.4,.5,1)">
+              <sc-for list="{{ strip }}" as="s" hint-placeholder-count="3">
+                <div style="height:32px;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:800;color:#f2f2f0;font-variant-numeric:tabular-nums">{{ s.n }}</div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ isSingleMode }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;letter-spacing:.1em;color:#f2f2f0">SGL</div>
+          </sc-if>
+          <div style="position:absolute;left:50%;top:2px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--color-accent)"></div>
+        </div>
+      </div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0">
+      <span style="font-size:10px;font-weight:800;letter-spacing:.28em;color:#4a4a48;text-shadow:0 1px 0 rgba(255,255,255,.8)">PHONE_FILM</span>
+      <div style="position:relative;width:118px;height:36px;border-radius:999px;background:#151515;box-shadow:inset 0 2px 4px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.8)">
+        <div style="position:absolute;top:3px;left:3px;width:56px;height:30px;border-radius:999px;background:linear-gradient(180deg,#fafaf8,#b9b9b6);box-shadow:0 1px 3px rgba(0,0,0,.5);transform:translateX({{ leverX }});transition:transform .25s cubic-bezier(.3,1.3,.5,1)"></div>
+        <button onClick="{{ setFilmMode }}" aria-label="필름 모드" style="position:absolute;left:0;top:0;width:59px;height:36px;border:none;background:transparent;cursor:pointer;border-radius:999px"></button>
+        <button onClick="{{ setSingleMode }}" aria-label="단일 촬영" style="position:absolute;right:0;top:0;width:59px;height:36px;border:none;background:transparent;cursor:pointer;border-radius:999px"></button>
+      </div>
+      <div style="width:118px;display:flex;justify-content:space-around;font-size:10px;font-weight:800;letter-spacing:.14em;text-shadow:0 1px 0 rgba(255,255,255,.8)">
+        <span style="color:{{ leverFilmC }}">FILM</span><span style="color:{{ leverSingleC }}">SINGLE</span>
+      </div>
+    </div>
+    <button onClick="{{ openDrawer }}" aria-label="필름 서랍 열기" style="width:88px;height:96px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:none;border-radius:18px;cursor:pointer;background:linear-gradient(180deg,#f7f7f5,#c4c4c1);box-shadow:0 2px 0 #8a8a87,0 4px 8px rgba(0,0,0,.3),inset 0 1px 0 #fff;font:inherit;transition:transform .1s" style-active="transform:translateY(2px)"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="flex:none"><path d="M12.8 7.3h1.3v-.7h8.3v8.6h-2.5a1.6 1.6 0 0 0-1.6 1.6v1.6h-4.2v-.8h-1.3" fill="#f7f7f5"></path><rect x="2.3" y="6.4" width="10.5" height="11.2" fill="{{ dbPoint }}"></rect><rect x="5.2" y="1.6" width="4.6" height="2.6" rx=".8" fill="#f7f7f5"></rect><rect x="1.5" y="4.2" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><rect x="1.5" y="17.4" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><path d="M4.2 6.6v10.8"></path><rect x="9.1" y="8.2" width="1.9" height="7.6" rx=".95" fill="#f7f7f5"></rect><rect x="15.4" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="17.6" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="19.8" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="15.4" y="16.2" width="1.1" height="1.2" rx=".3"></rect></svg><span style="font-size:12px;font-weight:800;color:#1a1a1a;white-space:nowrap">{{ dbName }}</span><span style="width:44px;height:5px;border-radius:999px;background:#2a2a28;box-shadow:inset 0 1px 2px rgba(0,0,0,.6),0 1px 0 #fff"></span></button>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:22px 24px;background-color:#1b1b1b;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.4px),radial-gradient(rgba(0,0,0,.6) 1px,transparent 1.6px);background-size:5px 5px,7px 7px;background-position:0 0,2px 3px">
+    <div style="padding:9px;border-radius:22px;background:linear-gradient(180deg,#ededeb,#a9a9a6);box-shadow:0 6px 14px rgba(0,0,0,.6),inset 0 1px 0 #fff">
+      <div style="position:relative;width:100%;aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:#000;box-shadow:inset 0 0 0 2px #0b0b0b">
+        <div ref="{{ panRef }}" style="position:absolute;inset:-6%;background-image:url(assets/scene.jpg);background-size:cover;background-position:50% 50%;filter:{{ cf.filter }}"></div>
+        <div style="position:absolute;inset:0;background:{{ cf.tint }};mix-blend-mode:soft-light;opacity:{{ cf.tintOp }}"></div>
+        <div style="position:absolute;inset:0;background:{{ cf.lift }};mix-blend-mode:lighten;opacity:0.22"></div>
+        <div style="position:absolute;inset:0;box-shadow:inset 0 0 40px rgba(0,0,0,.45);pointer-events:none"></div>
+        <sc-if value="{{ gridOn }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;background-image:linear-gradient(90deg,transparent calc(33.33% - 1px),rgba(255,255,255,.45) 33.33%,transparent calc(33.33% + 1px),transparent calc(66.66% - 1px),rgba(255,255,255,.45) 66.66%,transparent calc(66.66% + 1px)),linear-gradient(0deg,transparent calc(33.33% - 1px),rgba(255,255,255,.45) 33.33%,transparent calc(33.33% + 1px),transparent calc(66.66% - 1px),rgba(255,255,255,.45) 66.66%,transparent calc(66.66% + 1px))"></div></sc-if>
+        <sc-if value="{{ stampOn }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:16px;bottom:12px;font-family:ui-monospace,Menlo,monospace;font-size:14px;font-weight:700;color:var(--color-accent-400);letter-spacing:0.08em;white-space:nowrap">{{ stamp }}</span></sc-if>
+        <div style="position:absolute;top:10px;left:12px;font-size:10px;font-weight:800;letter-spacing:.16em;color:rgba(255,255,255,.85)">{{ vfLabel }}</div>
+        <sc-if value="{{ noFilm }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:16px;box-sizing:border-box;background:rgba(18,18,18,.62);backdrop-filter:blur(3px)">
+      <span style="font-size:11px;font-weight:800;letter-spacing:.2em;color:#f0f0ee">NO FILM · 필름을 골라 넣어 주세요</span>
+      <button onClick="{{ openDrawer }}" aria-label="필름 서랍 열기" style="display:flex;align-items:center;gap:10px;height:50px;padding:0 18px 0 11px;border:none;border-radius:16px;cursor:pointer;background:linear-gradient(180deg,#f7f7f5,#c4c4c1);box-shadow:0 2px 0 #8a8a87,0 4px 8px rgba(0,0,0,.3),inset 0 1px 0 #fff;font:inherit;flex:none;transition:transform .1s" style-active="transform:translateY(2px)"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="flex:none"><path d="M12.8 7.3h1.3v-.7h8.3v8.6h-2.5a1.6 1.6 0 0 0-1.6 1.6v1.6h-4.2v-.8h-1.3" fill="#f7f7f5"></path><rect x="2.3" y="6.4" width="10.5" height="11.2" fill="{{ dbPoint }}"></rect><rect x="5.2" y="1.6" width="4.6" height="2.6" rx=".8" fill="#f7f7f5"></rect><rect x="1.5" y="4.2" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><rect x="1.5" y="17.4" width="12.1" height="2.4" rx="1" fill="#f7f7f5"></rect><path d="M4.2 6.6v10.8"></path><rect x="9.1" y="8.2" width="1.9" height="7.6" rx=".95" fill="#f7f7f5"></rect><rect x="15.4" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="17.6" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="19.8" y="8" width="1.1" height="1.2" rx=".3"></rect><rect x="15.4" y="16.2" width="1.1" height="1.2" rx=".3"></rect></svg><span style="display:flex;flex-direction:column;align-items:flex-start;gap:4px"><span style="font-size:13px;font-weight:800;color:#1a1a1a;white-space:nowrap">{{ dbName }}</span><span style="width:44px;height:5px;border-radius:999px;background:#2a2a28;box-shadow:inset 0 1px 2px rgba(0,0,0,.6),0 1px 0 #fff"></span></span></button>
+      <div style="display:flex;padding:3px;border-radius:999px;background:rgba(255,255,255,.12);gap:2px">
+        <sc-for list="{{ inLengths }}" as="l" hint-placeholder-count="2"><button onClick="{{ l.pick }}" style="height:36px;padding:0 18px;border:none;border-radius:999px;background:{{ l.bg }};color:{{ l.fg }};font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">{{ l.n }}장</button></sc-for>
+      </div>
+      <button onClick="{{ loadRoll }}" disabled="{{ cantLoad }}" style="height:46px;padding:0 24px;border:none;border-radius:999px;background:{{ loadBg }};color:#fff;font:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.4);white-space:nowrap;transition:background .2s" style-active="transform:scale(.96)">{{ loadLabel }}</button>
+      <span style="font-size:11px;color:#c9c9c6;text-align:center;text-wrap:pretty">넣으면 다 찍을 때까지 바꿀 수 없고, 사진은 롤이 끝나면 현상돼요</span>
+    </div></sc-if>
+    <div ref="{{ flashRef }}" style="position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none"></div>
+      </div>
+    </div>
+  </div>
+  <div style="height:132px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 26px;background:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27180%27%20height=%27180%27%3E%3Cfilter%20id=%27g%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%27.95%27%20numOctaves=%273%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20values=%270%200%200%200%201%200%200%200%200%20.9%200%200%200%200%20.8%200%200%200%20.16%200%27/%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23g%29%27/%3E%3C/svg%3E),var(--pf-grain),#3d2618;background-position:0 0,37px 53px,0 0;box-shadow:inset 0 2px 0 rgba(0,0,0,.4),0 -2px 0 #000">
+    <button onClick="{{ goGallery }}" aria-label="사진" style="position:relative;width:58px;height:58px;border-radius:50%;overflow:hidden;border:3px solid #b9b9b6;padding:0;background:#0e0e0e;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,.4)">
+      <sc-if value="{{ showCanister }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;align-items:center;line-height:1.05;color:#f2f2f0"><span style="font-size:18px;font-weight:800">{{ shotCount }}</span><span style="font-size:8px;font-weight:800;letter-spacing:.08em">현상 전</span></div>
+      </sc-if>
+      <sc-if value="{{ hasLast }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;background-image:url(assets/scene.jpg);background-size:{{ last.bgSize }};background-position:{{ last.bgPos }};filter:{{ last.filter }}"></div>
+        <div style="position:absolute;inset:0;background:{{ last.tint }};mix-blend-mode:soft-light;opacity:{{ last.tintOp }}"></div>
+      </sc-if>
+    </button>
+    <button onClick="{{ shoot }}" aria-label="셔터" style="width:64px;height:64px;border-radius:50%;border:none;padding:0;cursor:pointer;background:radial-gradient(circle at 38% 30%,#ffffff,#d6d6d3 40%,#8f8f8c 100%);box-shadow:0 0 0 5px #3a3a3a,0 0 0 7px #b9b9b6,0 6px 12px 6px rgba(0,0,0,.6),inset 0 1px 1px #fff;transition:transform .1s" style-active="transform:translateY(2px)"></button>
+    <button onClick="{{ goSettings }}" aria-label="설정" style="width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;color:#2a2a28;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 38% 30%,#ffffff,#d0d0cd 50%,#9c9c99 100%);box-shadow:0 2px 4px rgba(0,0,0,.4),inset 0 1px 1px #fff" style-active="transform:scale(.95)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><line x1="21" x2="14" y1="4" y2="4"></line><line x1="10" x2="3" y1="4" y2="4"></line><line x1="21" x2="12" y1="12" y2="12"></line><line x1="8" x2="3" y1="12" y2="12"></line><line x1="21" x2="16" y1="20" y2="20"></line><line x1="12" x2="3" y1="20" y2="20"></line><line x1="14" x2="14" y1="2" y2="6"></line><line x1="8" x2="8" y1="10" y2="14"></line><line x1="16" x2="16" y1="18" y2="22"></line></svg></button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isEnd }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;padding:var(--space-8) var(--space-4) var(--space-6);box-sizing:border-box;gap:var(--space-4);background:var(--pf-grain),var(--color-bg)">
+  <span class="tag tag-accent-2" style="align-self:flex-start">현상 완료 · {{ endRoll.name }} {{ endRoll.total }}장</span>
+  <h1 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:34px;line-height:1.12;text-wrap:pretty">한 롤을 다 찍었어요</h1>
+  <p style="margin:0;font-size:15px;line-height:1.5;color:var(--color-neutral-700);text-wrap:pretty">이제 사진을 볼 수 있어요. 필름 잠금도 풀렸으니 새 필름을 골라 넣으세요.</p>
+  <div ref="{{ revealRef }}" style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;padding:var(--space-3);border-radius:var(--radius-lg);background:var(--color-text)">
+    <sc-for list="{{ endShots }}" as="s" hint-placeholder-count="24">
+      <button onClick="{{ s.open }}" style="display:flex;flex-direction:column;gap:2px;border:none;background:transparent;padding:0;cursor:pointer;text-align:left">
+        <div style="position:relative;width:100%;aspect-ratio:3/4;border-radius:4px;overflow:hidden">
+          <div style="position:absolute;inset:0;background-image:url(assets/scene.jpg);background-size:{{ s.bgSize }};background-position:{{ s.bgPos }};filter:{{ s.filter }}"></div>
+          <div style="position:absolute;inset:0;background:{{ s.tint }};mix-blend-mode:soft-light;opacity:{{ s.tintOp }}"></div><div style="position:absolute;inset:0;background:var(--pf-grain-light),var(--pf-grain);background-size:90px,90px;background-position:0 0,37px 53px;opacity:.85;pointer-events:none"></div>
+        </div>
+        <span style="font-size:8px;font-weight:700;color:var(--color-accent-400);font-family:ui-monospace,Menlo,monospace">{{ s.frame }}</span>
+      </button>
+    </sc-for>
+  </div>
+  <div style="flex:1"></div>
+  <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+    <button class="btn btn-primary btn-block" onClick="{{ goSelect }}" style="height:56px;font-size:16px">새 필름 고르기</button>
+    <button class="btn btn-ghost btn-block" onClick="{{ endSingle }}" style="height:48px">단일 촬영으로 계속 찍기</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isGallery }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;background:var(--pf-grain),var(--color-bg)">
+  <div style="display:flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-4) var(--space-2)">
+    <button class="btn btn-ghost btn-icon" onClick="{{ goBack }}" aria-label="뒤로" style="width:44px;height:44px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+    <h1 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:28px">사진</h1>
+  </div>
+  <div style="flex:1;overflow:auto;padding:var(--space-2) var(--space-4) var(--space-8);display:flex;flex-direction:column;gap:var(--space-6)">
+    <sc-if value="{{ hasRoll }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:var(--space-3);padding:var(--space-4);border-radius:var(--radius-lg);background:var(--color-surface)">
+        <div style="display:flex;align-items:center;gap:var(--space-3)">
+          <span style="width:40px;height:40px;border-radius:50%;background:{{ rf.tint }};flex:none"></span>
+          <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+            <span style="font-family:var(--font-heading);font-size:20px">{{ rf.name }} 현상 대기 중</span>
+            <span style="font-size:13px;color:var(--color-neutral-700)">{{ shotCount }} / {{ rollTotal }}장 촬영 · 다 찍으면 현상돼요</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px">
+          <sc-for list="{{ rollSlots }}" as="r" hint-placeholder-count="24">
+            <span style="aspect-ratio:3/4;border-radius:3px;background:{{ r.bg }};border:1.5px solid {{ r.bd }}"></span>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+    <sc-for list="{{ devRolls }}" as="d" hint-placeholder-count="0">
+      <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+        <div style="display:flex;align-items:baseline;gap:var(--space-2)">
+          <span style="font-family:var(--font-heading);font-size:20px">{{ d.name }}</span>
+          <span style="font-size:13px;color:var(--color-neutral-700)">{{ d.meta }}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px">
+          <sc-for list="{{ d.shots }}" as="s" hint-placeholder-count="8">
+            <button onClick="{{ s.open }}" style="position:relative;aspect-ratio:3/4;border-radius:var(--radius-sm);overflow:hidden;border:none;padding:0;cursor:pointer">
+              <div style="position:absolute;inset:0;background-image:url(assets/scene.jpg);background-size:{{ s.bgSize }};background-position:{{ s.bgPos }};filter:{{ s.filter }}"></div>
+              <div style="position:absolute;inset:0;background:{{ s.tint }};mix-blend-mode:soft-light;opacity:{{ s.tintOp }}"></div><div style="position:absolute;inset:0;background:var(--pf-grain-light),var(--pf-grain);background-size:120px,120px;background-position:0 0,37px 53px;opacity:.85;pointer-events:none"></div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+    <sc-if value="{{ hasSingles }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+        <div style="display:flex;align-items:baseline;gap:var(--space-2)">
+          <span style="font-family:var(--font-heading);font-size:20px">단일 촬영</span>
+          <span style="font-size:13px;color:var(--color-neutral-700)">{{ singleCount }}장</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px">
+          <sc-for list="{{ singles }}" as="s" hint-placeholder-count="4">
+            <button onClick="{{ s.open }}" style="position:relative;aspect-ratio:3/4;border-radius:var(--radius-sm);overflow:hidden;border:none;padding:0;cursor:pointer">
+              <div style="position:absolute;inset:0;background-image:url(assets/scene.jpg);background-size:{{ s.bgSize }};background-position:{{ s.bgPos }};filter:{{ s.filter }}"></div>
+              <div style="position:absolute;inset:0;background:{{ s.tint }};mix-blend-mode:soft-light;opacity:{{ s.tintOp }}"></div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ galleryEmpty }}" hint-placeholder-val="{{ false }}">
+      <p style="margin:0;font-size:15px;line-height:1.5;color:var(--color-neutral-700)">아직 사진이 없어요. 필름을 넣고 찍어 보세요.</p>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;background:var(--pf-grain),var(--color-bg)">
+  <div style="display:flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-4) var(--space-2)">
+    <button class="btn btn-ghost btn-icon" onClick="{{ goBack }}" aria-label="뒤로" style="width:44px;height:44px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+    <h1 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:28px">설정</h1>
+  </div>
+  <div style="flex:1;overflow:auto;padding:var(--space-2) var(--space-4) var(--space-8);display:flex;flex-direction:column;gap:var(--space-4)">
+    <div style="display:flex;flex-direction:column;border-radius:var(--radius-lg);background:var(--color-surface);padding:var(--space-1) 0">
+      <sc-for list="{{ toggles }}" as="t" hint-placeholder-count="2">
+        <button onClick="{{ t.flip }}" style="display:flex;align-items:center;gap:var(--space-3);min-height:60px;padding:0 var(--space-4);border:none;background:transparent;font:inherit;color:inherit;text-align:left;cursor:pointer">
+          <span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:600">{{ t.label }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ t.sub }}</span></span>
+          <span style="position:relative;width:52px;height:32px;border-radius:999px;background:{{ t.track }};transition:background .2s;flex:none"><span style="position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:var(--color-bg);box-shadow:var(--shadow-sm);transform:translateX({{ t.x }});transition:transform .2s"></span></span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-4);border-radius:var(--radius-lg);background:var(--color-accent-2-100);color:var(--color-accent-2-900)">
+      <span style="font-size:15px;font-weight:700">롤은 기기에 저장돼요</span>
+      <span style="font-size:13px;line-height:1.5;text-wrap:pretty">앱을 강제 종료하거나 재부팅해도 남은 장수와 찍은 사진은 그대로예요. 앱 데이터를 지우거나 다시 설치하면 진행 중인 롤은 초기화되고 잠금이 풀려요.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--color-neutral-700);padding:0 var(--space-1)">프로토타입 테스트</span>
+      <button class="btn btn-secondary btn-block" onClick="{{ finishRoll }}" disabled="{{ noRoll }}" style="height:48px">남은 장 모두 찍기</button>
+      <button class="btn btn-secondary btn-block" onClick="{{ wipe }}" style="height:48px">앱 데이터 지우기 (재설치)</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:4">
+  <button onClick="{{ closeDrawer }}" aria-label="서랍 닫기" style="position:absolute;inset:0;border:none;background:rgba(10,10,10,.5);cursor:default"></button>
+  <div ref="{{ drawerRef }}" style="position:absolute;left:10px;right:10px;bottom:10px;border-radius:26px;overflow:hidden;box-shadow:0 -6px 24px rgba(0,0,0,.45),inset 0 1px 0 #fff;background:repeating-linear-gradient(0deg,rgba(255,255,255,.07) 0 1px,rgba(0,0,0,.035) 1px 2px),linear-gradient(180deg,#f4f4f2,#c9c9c6)">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 12px 20px">
+      <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:17px;font-weight:800;color:#1a1a1a">필름 서랍</span><span style="font-size:12px;color:#4e4e4c">{{ drawerSub }}</span></div>
+      <button onClick="{{ closeDrawer }}" aria-label="닫기" style="width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;color:#2a2a28;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 38% 30%,#ffffff,#d0d0cd 50%,#9c9c99 100%);box-shadow:0 2px 4px rgba(0,0,0,.3),inset 0 1px 1px #fff"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+    </div>
+    <div ref="{{ trayRef }}" style="margin:0 12px 12px;padding:20px 10px 14px;border-radius:18px;display:flex;justify-content:space-around;align-items:flex-end;background-color:#1b1b1b;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.4px),radial-gradient(rgba(0,0,0,.6) 1px,transparent 1.6px);background-size:5px 5px,7px 7px;box-shadow:inset 0 8px 16px rgba(0,0,0,.85)">
+      <sc-for list="{{ canisters }}" as="c" hint-placeholder-count="3">
+        <button data-can="{{ c.id }}" onClick="{{ c.pick }}" aria-label="{{ c.name }}" style="display:flex;flex-direction:column;align-items:center;gap:10px;border:none;background:transparent;padding:0;cursor:pointer;font:inherit">
+          <span style="position:relative;width:80px;height:156px;border-radius:16px;background:#0d0d0d;box-shadow:inset 0 4px 10px rgba(0,0,0,.95),0 1px 0 rgba(255,255,255,.08);display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;box-sizing:border-box">
+            <span data-body="1" style="display:flex;flex-direction:column;align-items:center;transform:translateY({{ c.lift }});transition:transform .35s cubic-bezier(.3,1.3,.5,1);filter:drop-shadow(0 6px 6px rgba(0,0,0,.6))">
+              <span style="width:24px;height:9px;border-radius:3px 3px 0 0;background:linear-gradient(90deg,#8a8a87,#f2f2f0,#9a9a97)"></span>
+              <span style="width:62px;height:8px;border-radius:3px;background:linear-gradient(90deg,#7a7a77,#efefed,#8f8f8c)"></span>
+              <span style="width:58px;height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:linear-gradient(90deg,rgba(0,0,0,.42),rgba(255,255,255,.3) 28%,rgba(255,255,255,0) 52%,rgba(0,0,0,.5)),{{ c.point }}">
+                <span style="font-size:8px;font-weight:800;letter-spacing:.14em;color:rgba(255,255,255,.9)">{{ c.iso }}</span>
+                <span style="width:100%;padding:5px 0;background:rgba(255,255,255,.92);text-align:center;font-size:11px;font-weight:800;color:#1a1a1a;white-space:nowrap">{{ c.name }}</span>
+                <span style="font-size:7px;font-weight:800;letter-spacing:.14em;color:rgba(255,255,255,.8)">PHONE_FILM</span>
+              </span>
+              <span style="width:62px;height:8px;border-radius:3px;background:linear-gradient(90deg,#7a7a77,#efefed,#8f8f8c)"></span>
+            </span>
+          </span>
+          <span style="font-size:11px;font-weight:700;color:{{ c.labelC }};white-space:nowrap">{{ c.state }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasViewer }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;gap:var(--space-4);padding:var(--space-4);box-sizing:border-box;background:var(--color-text);color:var(--color-bg)">
+  <div style="display:flex;align-items:center;gap:var(--space-2)">
+    <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-family:var(--font-heading);font-size:20px">{{ viewer.name }}</span><span style="font-size:12px;color:var(--color-neutral-300)">{{ viewer.meta }}</span></div>
+    <button onClick="{{ closeViewer }}" aria-label="닫기" style="width:44px;height:44px;border-radius:50%;border:none;background:rgba(245,234,216,.1);color:var(--color-bg);display:flex;align-items:center;justify-content:center;cursor:pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+  </div>
+  <div style="position:relative;width:100%;aspect-ratio:3/4;border-radius:var(--radius-lg);overflow:hidden;margin:auto 0">
+    <div style="position:absolute;inset:0;background-image:url(assets/scene.jpg);background-size:{{ viewer.bgSize }};background-position:{{ viewer.bgPos }};filter:{{ viewer.filter }}"></div>
+    <div style="position:absolute;inset:0;background:{{ viewer.tint }};mix-blend-mode:soft-light;opacity:{{ viewer.tintOp }}"></div>
+    <div style="position:absolute;inset:0;background:{{ viewer.lift }};mix-blend-mode:lighten;opacity:0.22"></div>
+    <sc-if value="{{ viewer.grain }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;background:var(--pf-grain-light),var(--pf-grain);background-size:180px,180px;background-position:0 0,37px 53px;opacity:.85;pointer-events:none"></div></sc-if>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:var(--space-4);right:var(--space-4);bottom:var(--space-8);z-index:6;display:flex;justify-content:center;pointer-events:none">
+  <span style="padding:12px 18px;border-radius:999px;background:var(--color-text);color:var(--color-bg);font-size:14px;font-weight:600;box-shadow:var(--shadow-lg);text-align:center">{{ toast }}</span>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:396,&quot;height&quot;:812},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;body&quot;,&quot;dark&quot;,&quot;dial&quot;,&quot;silver&quot;],&quot;default&quot;:&quot;silver&quot;,&quot;tsType&quot;:&quot;'body'|'dark'|'dial'|'silver'&quot;}}">
+const FILMS = [
+  { id: 'tungsten', point: '#2f5d9e', pointBg: '#e3ecf8', pointInk: '#1d3a63', name: '텅스텐', en: 'TUNGSTEN 320', desc: '푸른 그림자, 차갑게 가라앉은 하늘', filter: 'saturate(.8) contrast(.88) brightness(1.06) hue-rotate(-12deg)', tint: '#2d5d9c', tintOp: .8, lift: '#2a3a4f' },
+  { id: 'gold', point: '#8a5a2b', pointBg: '#f3e9de', pointInk: '#55361a', name: '골드', en: 'GOLD 200', desc: '노랗게 익은 햇빛, 따뜻한 피부톤', filter: 'saturate(1.08) contrast(.9) brightness(1.04) sepia(.2)', tint: '#e3a33b', tintOp: .85, lift: '#4a3418' },
+  { id: 'forest', point: '#3f7a3a', pointBg: '#e3f0e1', pointInk: '#244a21', name: '포레스트', en: 'FOREST 400', desc: '짙어진 초록, 바랜 하이라이트', filter: 'saturate(.95) contrast(.9) brightness(1.03) hue-rotate(14deg)', tint: '#5f8f35', tintOp: .8, lift: '#26331f' },
+];
+const fm = id => FILMS.find(f => f.id === id) || FILMS[0];
+const pad = n => String(n).padStart(2, '0');
+const fmtDate = t => { const d = new Date(t); return `'${String(d.getFullYear()).slice(2)} ${pad(d.getMonth() + 1)} ${pad(d.getDate())}`; };
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.key = 'phonefilm:v1:' + (props.variant || 'body');
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(this.key)); } catch (e) {}
+    this.state = Object.assign(this.fresh(), saved || {}, { toast: null, viewer: null, pendingFilm: null, pendingLength: 24 });
+    if (this.state.screen === 'length') this.state.screen = 'select';
+    this.panRef = el => { if (el && !el._a) el._a = el.animate([{ transform: 'translate(-2%,-1%) scale(1.02)' }, { transform: 'translate(2%,1.5%) scale(1.04)' }], { duration: 7000, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' }); };
+    this.flashRef = el => { this.flashEl = el; };
+    this.listRef = el => { this.listEl = el; };
+    this.trayRef = el => { this.trayEl = el; };
+    this.drawerRef = el => { if (el) el.animate([{ transform: 'translateY(110%)' }, { transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.2,1.1,.3,1)' }); };
+    this.revealRef = el => { if (el) [...el.children].forEach((c, i) => c.animate([{ opacity: 0, filter: 'brightness(3) blur(3px)', transform: 'scale(.85)' }, { opacity: 1, filter: 'none', transform: 'none' }], { duration: 600, delay: 250 + i * 55, fill: 'backwards', easing: 'cubic-bezier(.2,.8,.3,1)' })); };
+  }
+  fresh() { return { screen: 'select', mode: 'film', roll: null, singleFilm: 'gold', singleShots: [], devRolls: [], grid: false, stamp: true, lastEnd: null }; }
+  componentDidUpdate() {
+    const { toast, viewer, pendingFilm, pendingLength, drawerOpen, ...keep } = this.state;
+    try { localStorage.setItem(this.key, JSON.stringify(keep)); } catch (e) {}
+  }
+  componentWillUnmount() { clearTimeout(this.tt); clearTimeout(this.et); }
+  say(msg) { clearTimeout(this.tt); this.setState({ toast: msg }); this.tt = setTimeout(() => this.setState({ toast: null }), 2200); }
+  shake(id) {
+    const el = this.listEl && this.listEl.querySelector(`[data-film="${id}"]`);
+    if (el) el.animate([0, -10, 10, -8, 8, -4, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 420, easing: 'ease-out' });
+  }
+  camScreen() { return { body: 'camA', dark: 'camB', dial: 'camC', silver: 'camD' }[this.props.variant || 'body']; }
+  goCamera = () => this.setState({ screen: this.camScreen() });
+  goSelect = () => this.setState({ screen: 'select' });
+  goBack = () => { const s = this.state; this.setState({ screen: (s.mode === 'single' || s.roll) ? this.camScreen() : 'select' }); };
+  setMode(mode) {
+    if (mode === this.state.mode) return;
+    if (mode === 'film') {
+      this.setState({ mode, screen: this.state.screen === 'select' ? 'select' : this.camScreen() });
+      this.say(this.state.roll ? `${fm(this.state.roll.filmId).name} 롤로 돌아왔어요 · 남은 ${this.state.roll.total - this.state.roll.shots.length}장` : '필름 모드 · 필름을 넣어 주세요');
+    } else {
+      this.setState({ mode, screen: this.camScreen() });
+      this.say(this.state.roll ? '단일 촬영 · 필름 롤은 그대로 멈춰 있어요' : '단일 촬영 · 필름을 자유롭게 바꿀 수 있어요');
+    }
+  }
+  pickFilm(id) {
+    const s = this.state;
+    if (s.mode === 'single') return this.setState({ singleFilm: id, screen: this.camScreen() });
+    if (s.roll) {
+      if (id === s.roll.filmId) return this.goCamera();
+      this.shake(id);
+      return this.say(`롤을 다 찍어야 바꿀 수 있어요 · 남은 ${s.roll.total - s.roll.shots.length}장`);
+    }
+    this.setState({ pendingFilm: id, pendingLength: 24, screen: 'length' });
+  }
+  loadRoll = () => this.setState(s => ({ roll: { filmId: s.pendingFilm, total: s.pendingLength, shots: [], start: Date.now() }, pendingFilm: null, screen: this.camScreen() }));
+  makeShot(filmId) { return { f: filmId, x: Math.round(20 + Math.random() * 60), y: Math.round(25 + Math.random() * 50), s: Math.round(150 + Math.random() * 90), t: Date.now() }; }
+  flash() { if (this.flashEl) this.flashEl.animate([{ opacity: .95 }, { opacity: 0 }], { duration: 380, easing: 'ease-out' }); }
+  shoot = () => {
+    const s = this.state;
+    this.flash();
+    if (s.mode === 'single') return this.setState({ singleShots: [...s.singleShots, this.makeShot(s.singleFilm)] });
+    if (!s.roll) return this.say('필름을 먼저 넣어 주세요');
+    const shots = [...s.roll.shots, this.makeShot(s.roll.filmId)];
+    if (shots.length >= s.roll.total) this.endRoll({ ...s.roll, shots });
+    else this.setState({ roll: { ...s.roll, shots } });
+  };
+  endRoll(roll, delay = 650) {
+    const done = { ...roll, end: Date.now() };
+    this.setState({ roll: { ...roll } });
+    clearTimeout(this.et);
+    this.et = setTimeout(() => this.setState(s => ({ roll: null, devRolls: [done, ...s.devRolls], lastEnd: done, screen: 'end', mode: 'film' })), delay);
+  }
+  finishRoll = () => {
+    const r = this.state.roll; if (!r) return;
+    const shots = [...r.shots]; while (shots.length < r.total) shots.push(this.makeShot(r.filmId));
+    this.endRoll({ ...r, shots }, 0);
+  };
+  wipe = () => { try { localStorage.removeItem(this.key); } catch (e) {} this.setState({ ...this.fresh(), viewer: null }); this.say('데이터를 지웠어요 · 롤 잠금이 풀렸어요'); };
+  lockedCan(id) {
+    const el = this.trayEl && this.trayEl.querySelector(`[data-can="${id}"] [data-body]`);
+    if (el) el.animate([0, -7, 7, -5, 5, -2, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 420, easing: 'ease-out' });
+    const r = this.state.roll;
+    this.say(`롤을 다 찍어야 바꿀 수 있어요 · 남은 ${r.total - r.shots.length}장`);
+  }
+  takeFilm(id) {
+    if (this.taking) return;
+    this.taking = true;
+    const el = this.trayEl && this.trayEl.querySelector(`[data-can="${id}"] [data-body]`);
+    if (el) el.animate([{ transform: getComputedStyle(el).transform }, { transform: 'translateY(-130px) rotate(-6deg)', opacity: 0.2 }], { duration: 380, easing: 'cubic-bezier(.5,0,.7,.4)', fill: 'forwards' });
+    setTimeout(() => {
+      this.taking = false;
+      if (this.state.mode === 'single') this.setState({ singleFilm: id, drawerOpen: false });
+      else this.setState({ pendingFilm: id, drawerOpen: false });
+    }, 400);
+  }
+  cycleFilm = () => { const i = FILMS.findIndex(f => f.id === this.state.singleFilm); this.setState({ singleFilm: FILMS[(i + 1) % FILMS.length].id }); };
+  photo(sh, i, total) {
+    const f = fm(sh.f);
+    return { filter: f.filter, tint: f.tint, tintOp: f.tintOp, lift: f.lift, bgSize: sh.s + '%', bgPos: `${sh.x}% ${sh.y}%`, frame: pad(i + 1), name: f.name, meta: `${total ? `${i + 1} / ${total}` : '단일'} · ${fmtDate(sh.t)}`, open: () => this.setState({ viewer: { ...f, grain: !!total, bgSize: sh.s + '%', bgPos: `${sh.x}% ${sh.y}%`, meta: `${total ? `${i + 1}번째 프레임 / ${total}` : '단일 촬영'} · ${fmtDate(sh.t)}` } }) };
+  }
+  renderVals() {
+    const s = this.state, roll = s.roll, film = s.mode === 'film', single = !film;
+    const cfId = film ? (roll ? roll.filmId : FILMS[0].id) : s.singleFilm;
+    const cf = fm(cfId);
+    const total = roll ? roll.total : 24, shotCount = roll ? roll.shots.length : 0, remaining = total - shotCount;
+    const idx = total - remaining;
+    const dark = (this.props.variant === 'dark' && s.screen === 'camB') || s.screen === 'camD';
+    const on = 'var(--color-accent)', onFg = 'var(--color-bg)';
+    const noFilm = film && !roll;
+    const strip = noFilm ? [{ n: '–', color: 'var(--color-bg)' }] : Array.from({ length: total + 1 }, (_, i) => ({ n: total - i, color: i === idx ? 'var(--color-bg)' : 'var(--color-neutral-500)' }));
+    const ix = noFilm ? 0 : idx;
+    let ticks, discDeg;
+    if (film) {
+      const step = 360 / (total + 1);
+      ticks = strip.map((t, i) => ({ n: t.n, deg: i * step, size: i === ix ? '22px' : (t.n % 6 === 0 ? '15px' : '11px'), color: i === ix ? 'var(--color-text)' : 'var(--color-neutral-500)', onTap: null, cursor: 'default' }));
+      discDeg = -ix * step;
+    } else {
+      const fi = FILMS.findIndex(f => f.id === s.singleFilm);
+      ticks = FILMS.map((f, i) => ({ n: f.name, deg: i * 120, size: i === fi ? '22px' : '16px', color: i === fi ? 'var(--color-text)' : 'var(--color-neutral-500)', onTap: () => this.setState({ singleFilm: f.id }), cursor: 'pointer' }));
+      discDeg = -fi * 120;
+    }
+    const lockedFilm = film && roll;
+    const pf = fm(s.pendingFilm);
+    const singles = s.singleShots.map((sh, i) => this.photo(sh, i, 0)).reverse();
+    const devRolls = s.devRolls.map(r => ({ name: `${fm(r.filmId).name} ${r.total}장`, meta: fmtDate(r.end), shots: r.shots.map((sh, i) => this.photo(sh, i, r.total)) }));
+    const lastSingle = s.singleShots[s.singleShots.length - 1];
+    const endR = s.lastEnd;
+    return {
+      rootBg: dark ? 'var(--color-text)' : 'var(--pf-grain),var(--color-bg)',
+      isSelect: s.screen === 'select', isLength: s.screen === 'length', isCamA: s.screen === 'camA', isCamB: s.screen === 'camB', isCamC: s.screen === 'camC', isCamD: s.screen === 'camD',
+      stripY30: `${-ix * 32}px`, leverX: film ? '0px' : '56px', leverXs: film ? '0px' : '49px', noFilm,
+      drawerOpen: !!s.drawerOpen, drawerRef: this.drawerRef, trayRef: this.trayRef,
+      openDrawer: () => this.setState({ drawerOpen: true }), closeDrawer: () => this.setState({ drawerOpen: false }),
+      drawerSub: single ? '하나 꺼내서 바로 바꿔 끼워요' : roll ? `${fm(roll.filmId).name} 롤을 다 찍을 때까지 다른 필름은 잠겨 있어요` : '넣을 필름을 하나 꺼내세요',
+      dbName: single ? fm(s.singleFilm).name : roll ? `${fm(roll.filmId).name} · ${remaining}` : (s.pendingFilm ? fm(s.pendingFilm).name : '필름 서랍'),
+      dbPoint: single ? fm(s.singleFilm).point : roll ? fm(roll.filmId).point : (s.pendingFilm ? fm(s.pendingFilm).point : '#5a5a58'),
+      canisters: FILMS.map(f => {
+        const locked = film && roll && roll.filmId !== f.id;
+        const cur = single ? s.singleFilm === f.id : roll ? roll.filmId === f.id : s.pendingFilm === f.id;
+        const state = cur ? (film && roll ? `장전됨 · ${remaining}장` : '끼워져 있음') : locked ? '잠김' : '꺼내기';
+        const pick = cur ? () => this.setState({ drawerOpen: false }) : locked ? () => this.lockedCan(f.id) : () => this.takeFilm(f.id);
+        return { id: f.id, name: f.name, point: f.point, iso: f.en.split(' ')[1] || '', lift: cur ? '-26px' : '0px', state, labelC: cur ? '#f0f0ee' : '#a8a8a6', pick };
+      }),
+      inFilms: FILMS.map(f => { const sel = s.pendingFilm === f.id; return { ...f, op: s.pendingFilm && !sel ? 0.55 : 1, scale: sel ? 1.08 : 1, ring: sel ? `0 0 0 2px #121212,0 0 0 4px ${f.point}` : '0 0 0 1px rgba(255,255,255,.3)', pick: () => this.setState({ pendingFilm: f.id }) }; }),
+      inLengths: [24, 36].map(n => { const sel = s.pendingLength === n; return { n, bg: sel ? '#f0f0ee' : 'transparent', fg: sel ? '#1a1a1a' : '#f0f0ee', pick: () => this.setState({ pendingLength: n }) }; }),
+      cantLoad: !s.pendingFilm, loadBg: s.pendingFilm ? fm(s.pendingFilm).point : 'rgba(255,255,255,.18)',
+      loadLabel: s.pendingFilm ? `${fm(s.pendingFilm).name} ${s.pendingLength}장 장전하기` : '필름을 골라 주세요',
+      leverFilmCD: film ? '#f0f0ee' : '#7a7a77', leverSingleCD: single ? '#f0f0ee' : '#7a7a77',
+      leverFilmC: film ? '#1a1a1a' : '#7a7a77', leverSingleC: single ? '#1a1a1a' : '#7a7a77',
+      vfLabel: noFilm ? '' : film ? `${cf.en} · ${remaining}/${total}` : `${cf.en} · SINGLE`,
+      ringText: noFilm ? 'NO FILM · NO FILM · PHONE_FILM ·' : film ? `${cf.en} · ${total}EXP · PHONE_FILM ·` : `${cf.en} · SINGLE · PHONE_FILM ·`,
+      isEnd: s.screen === 'end' && !!endR, isGallery: s.screen === 'gallery', isSettings: s.screen === 'settings',
+      isFilmMode: film, isSingleMode: single,
+      canGoCamera: single || !!roll,
+      goCamera: this.goCamera, goSelect: this.goSelect, goBack: this.goBack,
+      goGallery: () => this.setState({ screen: 'gallery' }), goSettings: () => this.setState({ screen: 'settings' }),
+      setFilmMode: () => this.setMode('film'), setSingleMode: () => this.setMode('single'),
+      mFilmBg: film ? on : 'transparent', mFilmFg: film ? onFg : 'var(--color-text)',
+      mSingleBg: single ? on : 'transparent', mSingleFg: single ? onFg : 'var(--color-text)',
+      mFilmBgD: film ? 'var(--color-bg)' : 'transparent', mFilmFgD: film ? 'var(--color-text)' : 'var(--color-bg)',
+      mSingleBgD: single ? 'var(--color-bg)' : 'transparent', mSingleFgD: single ? 'var(--color-text)' : 'var(--color-bg)',
+      selectTitle: single ? '단일 촬영할 필름을 골라요' : lockedFilm ? `지금은 ${fm(roll.filmId).name} 롤을 찍는 중이에요` : '어떤 필름을 넣을까요?',
+      selectSub: single ? '단일 촬영은 언제든 필름을 바꿀 수 있고, 찍은 사진을 바로 볼 수 있어요.' : lockedFilm ? `남은 ${remaining}장을 다 찍으면 현상되고, 다른 필름을 고를 수 있어요.` : '필름을 넣으면 한 롤을 다 찍을 때까지 바꿀 수 없어요. 사진은 롤이 끝나면 한꺼번에 현상돼요.',
+      films: FILMS.map(f => {
+        const loaded = single ? f.id === s.singleFilm : (roll && roll.filmId === f.id);
+        const locked = lockedFilm && roll.filmId !== f.id;
+        return { ...f, isLoaded: !!loaded, loadedLabel: single ? '사용 중' : `장전됨 · ${remaining}장 남음`, isLocked: !!locked, opacity: locked ? 0.55 : 1, border: loaded ? f.point : 'transparent', onTap: () => this.pickFilm(f.id) };
+      }),
+      listRef: this.listRef, panRef: this.panRef, flashRef: this.flashRef, revealRef: this.revealRef,
+      pf, pendingLength: s.pendingLength,
+      lengths: [24, 36].map(n => { const sel = s.pendingLength === n; return { n, label: n === 24 ? '가볍게 한 롤' : '길게 한 롤', border: sel ? pf.point : 'transparent', bg: sel ? pf.pointBg : 'var(--color-surface)', fg: sel ? pf.pointInk : 'var(--color-text)', pick: () => this.setState({ pendingLength: n }) }; }),
+      loadRoll: this.loadRoll,
+      cf: noFilm ? { ...cf, name: '필름 없음', en: 'NO FILM', tint: '#3a3a3a', filter: 'none', tintOp: 0 } : cf, rf: cf,
+      chipLabel: noFilm ? '필름 없음' : film ? `${cf.name} · ${total}장` : `${cf.name} · 단일`,
+      chipSub: noFilm ? '필름을 넣어 주세요' : film ? `${cf.en} · ${total}EXP` : `${cf.en} · SINGLE`,
+      camStatus: noFilm ? '필름 모드 · 필름을 넣어 주세요' : film ? `필름 모드 · 남은 ${remaining} / ${total}장 · 다 찍으면 현상` : `단일 촬영 · ${s.singleShots.length}장 찍음`,
+      dialHint: noFilm ? '필름 없음' : film ? `남은 ${remaining}장` : '다이얼의 필름 이름을 눌러 바꾸기',
+      rollTotal: total, remaining, shotCount,
+      strip, stripY: `${-ix * 60}px`, stripX: `${44 - ix * 44}px`, ticks, discDeg,
+      showCanister: film && !!roll, hasLast: single && !!lastSingle,
+      last: lastSingle ? this.photo(lastSingle, 0, 0) : {},
+      shoot: this.shoot, cycleFilm: this.cycleFilm,
+      filmDots: FILMS.map(f => { const sel = f.id === s.singleFilm; return { name: f.name, point: f.point, scale: sel ? 1.12 : 1,
+        ringLight: sel ? '0 0 0 2px #fff,0 0 0 4px #1a1a1a' : '0 0 0 1px rgba(0,0,0,.18)', ringDark: sel ? '0 0 0 2px #1a1a1a,0 0 0 4px #f0f0ee' : '0 0 0 1px rgba(255,255,255,.25)',
+        labelLight: sel ? '#1a1a1a' : '#6a6a68', labelDark: sel ? '#f0f0ee' : '#9a9a98', pick: () => this.setState({ singleFilm: f.id }) }; }),
+      gridOn: s.grid, stampOn: s.stamp, stamp: fmtDate(Date.now()),
+      endRoll: endR ? { name: fm(endR.filmId).name, total: endR.total } : {},
+      endShots: endR ? endR.shots.map((sh, i) => this.photo(sh, i, endR.total)) : [],
+      endSingle: () => this.setState({ mode: 'single', screen: this.camScreen() }),
+      hasRoll: !!roll, rollSlots: Array.from({ length: total }, (_, i) => ({ bg: i < shotCount ? 'var(--color-text)' : 'transparent', bd: i < shotCount ? 'var(--color-text)' : 'var(--color-neutral-400)' })),
+      devRolls, singles, hasSingles: singles.length > 0, singleCount: singles.length,
+      galleryEmpty: !roll && !devRolls.length && !singles.length,
+      toggles: [
+        { label: '격자 표시', sub: '3×3 구도선', v: s.grid, k: 'grid' },
+        { label: '날짜 각인', sub: "사진 오른쪽 아래에 '26 10 07 형식으로", v: s.stamp, k: 'stamp' },
+      ].map(t => ({ ...t, track: t.v ? 'var(--color-accent-2)' : 'var(--color-neutral-300)', x: t.v ? '20px' : '0px', flip: () => this.setState({ [t.k]: !t.v }) })),
+      finishRoll: this.finishRoll, noRoll: !roll, wipe: this.wipe,
+      hasViewer: !!s.viewer, viewer: s.viewer || {}, closeViewer: () => this.setState({ viewer: null }),
+      hasToast: !!s.toast, toast: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>
