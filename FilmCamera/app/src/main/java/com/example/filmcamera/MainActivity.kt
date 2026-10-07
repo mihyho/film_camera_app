@@ -12,6 +12,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -33,6 +34,10 @@ class MainActivity : ComponentActivity() {
     private lateinit var glView: GLSurfaceView
     private lateinit var renderer: LutRenderer
     private var imageCapture: ImageCapture? = null
+    private var camera: Camera? = null
+
+    /** 핀치가 이어지는 동안 카메라가 줌 상태를 알려 주기 전에 다음 이벤트가 오므로, 목표 배율을 따로 들고 있는다 */
+    private var zoomTarget = 1f
 
     private val worker = Executors.newSingleThreadExecutor()
 
@@ -53,6 +58,7 @@ class MainActivity : ComponentActivity() {
 
         controller = AppController(applicationContext)
         controller.exportPending() // 내보내기 도중 앱이 죽었던 롤이 있으면 이어서 처리
+        controller.cleanOrphanFiles() // 필름을 버리는 도중 앱이 죽어 남은 사진 정리
 
         glView = GLSurfaceView(this)
         glView.setEGLContextClientVersion(3)
@@ -66,7 +72,7 @@ class MainActivity : ComponentActivity() {
                 renderer.setLut(controller.lutFor(controller.currentFilm))
                 renderer.setClarity(controller.currentFilm.clarity)
             }
-            CameraScreen(controller, glView, onShutter = ::takePhoto)
+            CameraScreen(controller, glView, onShutter = ::takePhoto, onZoomBy = ::zoomBy, onZoomToggle = ::zoomToggle)
         }
 
         if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -106,8 +112,29 @@ class MainActivity : ComponentActivity() {
                 .build()
             imageCapture = capture
             provider.unbindAll()
-            provider.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, preview, capture)
+            val cam = provider.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, preview, capture)
+            camera = cam
+            cam.cameraInfo.zoomState.observe(this) { zs ->
+                zoomTarget = zs.zoomRatio
+                controller.updateZoom(zs.zoomRatio, zs.maxZoomRatio)
+            }
         }, ContextCompat.getMainExecutor(this))
+    }
+
+    /** 핀치: 두 손가락 간격의 비(scale)만큼 확대/축소 */
+    private fun zoomBy(scale: Float) {
+        val cam = camera ?: return
+        val zs = cam.cameraInfo.zoomState.value ?: return
+        zoomTarget = ZoomMath.pinch(zoomTarget, scale, zs.minZoomRatio, zs.maxZoomRatio)
+        cam.cameraControl.setZoomRatio(zoomTarget)
+    }
+
+    /** 더블탭: 1배 <-> 2배 */
+    private fun zoomToggle() {
+        val cam = camera ?: return
+        val zs = cam.cameraInfo.zoomState.value ?: return
+        zoomTarget = ZoomMath.doubleTapTarget(zs.zoomRatio, zs.minZoomRatio, zs.maxZoomRatio)
+        cam.cameraControl.setZoomRatio(zoomTarget)
     }
 
     private fun takePhoto() {
@@ -117,6 +144,7 @@ class MainActivity : ComponentActivity() {
         val s = controller.state
         val mode = s.mode
         val film = controller.currentFilm
+        val rollStart = s.roll?.start
         if (mode == Mode.FILM) {
             val roll = s.roll
             if (roll == null) { controller.showToast("필름을 먼저 넣어 주세요"); return }
@@ -136,7 +164,7 @@ class MainActivity : ComponentActivity() {
                     val result = runCatching { PhotoPipeline.process(applicationContext, bytes, rotation, lut, mode, film) }
                     runOnUiThread {
                         if (mode == Mode.FILM) inFlightFilm--
-                        result.onSuccess { controller.onPhotoSaved(it, mode, film) }
+                        result.onSuccess { controller.onPhotoSaved(it, mode, film, rollStart) }
                         result.onFailure {
                             Log.e("FilmCamera", "저장 실패", it)
                             controller.showToast("저장 실패: ${it.message}")

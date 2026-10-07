@@ -39,7 +39,10 @@ import kotlinx.coroutines.withContext
 
 /** 디자인 2a(silver) 카메라 화면: 상단 실버 플레이트 / 블랙 뷰파인더 / 다크 브라운 하단 */
 @Composable
-fun CameraScreen(c: AppController, glView: GLSurfaceView, onShutter: () -> Unit) {
+fun CameraScreen(
+    c: AppController, glView: GLSurfaceView, onShutter: () -> Unit,
+    onZoomBy: (Float) -> Unit, onZoomToggle: () -> Unit,
+) {
     val s = c.state
     val film = s.mode == Mode.FILM
     val roll = s.roll
@@ -85,6 +88,8 @@ fun CameraScreen(c: AppController, glView: GLSurfaceView, onShutter: () -> Unit)
             ViewfinderZone(
                 glView = glView, label = label, grid = s.grid, stampOn = s.stamp, stampText = c.stampText(),
                 flashTrigger = c.flashTrigger, noFilm = noFilm,
+                zoom = c.zoomRatio, zoomEnabled = c.zoomMax > 1.01f && c.panel == null && !c.drawerOpen,
+                onZoomBy = onZoomBy, onZoomToggle = onZoomToggle,
                 pendingFilm = c.pendingFilm, pendingLength = c.pendingLength,
                 onPendingLength = { c.pendingLength = it }, onLoad = c::loadPendingRoll,
                 onDrawer = c::openDrawer,
@@ -105,8 +110,8 @@ fun CameraScreen(c: AppController, glView: GLSurfaceView, onShutter: () -> Unit)
                             onBack = { c.panel = null }, onOpen = c::openViewer,
                         )
                         Panel.Settings -> SettingsPanel(
-                            grid = s.grid, stamp = s.stamp, hasRoll = s.roll != null, debug = BuildConfig.DEBUG,
-                            onGrid = c::setGrid, onStamp = c::setStamp,
+                            grid = s.grid, stamp = s.stamp, roll = s.roll, debug = BuildConfig.DEBUG,
+                            onGrid = c::setGrid, onStamp = c::setStamp, onDiscard = c::discardRoll,
                             onFinishRoll = c::debugFinishRoll, onWipe = c::debugWipe, onBack = { c.panel = null },
                         )
                         is Panel.Viewer -> ViewerPanel(p.shot, p.title, p.meta, onClose = { c.closeViewer(p) })

@@ -2,6 +2,7 @@ package com.example.filmcamera
 
 import android.content.Context
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -56,6 +57,17 @@ class AppController(private val appContext: Context) {
     var drawerOpen by mutableStateOf(false)
         private set
     var panel by mutableStateOf<Panel?>(null)
+
+    /** 카메라 확대 상태(실제 카메라가 알려 준 값). 확대를 못 하는 카메라면 최대 배율이 1 */
+    var zoomRatio by mutableFloatStateOf(1f)
+        private set
+    var zoomMax by mutableFloatStateOf(1f)
+        private set
+
+    fun updateZoom(ratio: Float, max: Float) {
+        zoomRatio = ratio
+        zoomMax = max
+    }
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val exporting = HashSet<Long>()
@@ -127,10 +139,14 @@ class AppController(private val appContext: Context) {
     }
 
     /** 사진 파일이 저장된 뒤에 호출한다(저장 성공 -> 카운트 감소 순서). */
-    fun onPhotoSaved(saved: SavedPhoto, mode: Mode, film: Film) {
+    fun onPhotoSaved(saved: SavedPhoto, mode: Mode, film: Film, rollStart: Long? = null) {
         val now = System.currentTimeMillis()
         if (mode == Mode.FILM) {
-            if (state.roll == null) return
+            // 찍는 동안 롤을 버렸거나(버린 뒤 새 롤을 넣은 경우 포함) 롤이 바뀌었으면 이 사진은 새 롤에 섞이지 않게 지운다
+            if (state.roll == null || (rollStart != null && state.roll?.start != rollStart)) {
+                saved.file?.let { f -> scope.launch(Dispatchers.IO) { File(appContext.filesDir, f).delete() } }
+                return
+            }
             val (next, finished) = RollEngine.recordFilmShot(state, Shot(film, saved.file!!, now), now)
             commit(next)
             if (finished) {
@@ -161,6 +177,32 @@ class AppController(private val appContext: Context) {
                 }
                 result.onFailure { showToast("사진을 갤러리로 옮기지 못했어요 · 다음에 다시 시도해요") }
                 exporting.remove(roll.start)
+            }
+        }
+    }
+
+    /**
+     * 필름 버리기: 진행 중인 롤을 포기하고 초기화한다(찍은 사진은 모두 삭제, 되돌릴 수 없음).
+     * 롤 상태를 먼저 저장해서 지우고, 파일은 그 뒤에 지운다 - 삭제 도중 앱이 죽어도 롤이 되살아나지 않고,
+     * 남은 파일은 다음 실행 때 cleanOrphanFiles()가 정리한다. 단일 촬영/현상된 롤/설정은 건드리지 않는다.
+     */
+    fun discardRoll() {
+        val roll = state.roll ?: return
+        val files = roll.shots.map { it.file }
+        val name = roll.film.displayName
+        commit(RollEngine.discardRoll(state))
+        pendingFilm = null
+        panel = null
+        scope.launch(Dispatchers.IO) { files.forEach { File(appContext.filesDir, it).delete() } }
+        showToast("$name 필름을 버렸어요 · 새 필름을 골라 넣을 수 있어요")
+    }
+
+    /** 상태가 참조하지 않는 비공개 사진(버리는 도중 앱이 죽어 남은 파일 등)을 지운다. 앱 시작 시 호출. */
+    fun cleanOrphanFiles() {
+        val referenced = RollEngine.referencedPrivateFiles(state)
+        scope.launch(Dispatchers.IO) {
+            File(appContext.filesDir, "rolls/pending").listFiles()?.forEach {
+                if ("rolls/pending/${it.name}" !in referenced) it.delete()
             }
         }
     }

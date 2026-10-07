@@ -23,6 +23,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +48,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.filmcamera.data.Film
 
@@ -59,6 +64,10 @@ fun ViewfinderZone(
     stampOn: Boolean,
     stampText: String,
     flashTrigger: Int,
+    zoom: Float,
+    zoomEnabled: Boolean,
+    onZoomBy: (Float) -> Unit,
+    onZoomToggle: () -> Unit,
     noFilm: Boolean,
     pendingFilm: Film?,
     pendingLength: Int,
@@ -97,6 +106,14 @@ fun ViewfinderZone(
             Box(Modifier.size(previewW, previewH)) {
                 Box(Modifier.fillMaxSize().clip(RoundedCornerShape(14.dp)).background(Color.Black)) {
                     AndroidView({ glView }, Modifier.fillMaxSize())
+                    // 확대 제스처: 핀치로 확대/축소, 두 번 탭하면 1배 <-> 2배. 서랍/패널이 떠 있을 때는 받지 않는다.
+                    if (zoomEnabled) {
+                        Box(
+                            Modifier.fillMaxSize()
+                                .pointerInput(Unit) { detectTransformGestures { _, _, z, _ -> if (z != 1f) onZoomBy(z) } }
+                                .pointerInput(Unit) { detectTapGestures(onDoubleTap = { onZoomToggle() }) },
+                        )
+                    }
                     // 비네팅: inset 0 0 40px rgba(0,0,0,.45)
                     Box(Modifier.fillMaxSize().insetShadow(corner = 14.dp, blur = 40.dp, color = Color.Black.copy(alpha = .45f)))
                     if (grid) GridLines()
@@ -116,6 +133,7 @@ fun ViewfinderZone(
                     if (noFilm) NoFilmOverlay(drawerName, drawerAccent, pendingFilm, pendingLength, onPendingLength, onLoad, onDrawer)
                     panel() // 현상/사진/설정 같은 패널은 이 창 안에서만 뜬다
                     Flash(flashTrigger)
+                    ZoomHud(zoom, Modifier.align(Alignment.BottomCenter).padding(bottom = 14.dp))
                 }
                 // SurfaceView는 Compose 클립이 안 먹으므로, 베젤 그라데이션으로 모서리를 덮고 안쪽 2px 테두리를 그린다
                 Canvas(Modifier.fillMaxSize()) {
@@ -251,4 +269,24 @@ private fun SmallDrawerButton(name: String, accent: Color, onClick: () -> Unit) 
             DrawerHandle()
         }
     }
+}
+
+
+/** 확대 배율 표시: 확대 중에는 계속 보이고, 1배로 돌아오면 잠시 뒤 사라진다 */
+@Composable
+private fun ZoomHud(zoom: Float, modifier: Modifier) {
+    var visible by remember { mutableStateOf(false) }
+    LaunchedEffect(zoom) {
+        visible = true
+        if (zoom <= 1.02f) {
+            kotlinx.coroutines.delay(1200)
+            visible = false
+        }
+    }
+    if (!visible) return
+    Text(
+        com.example.filmcamera.ZoomMath.format(zoom), color = Color.White,
+        style = TextStyle(fontFamily = PFFonts.Figtree, fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = .08.em),
+        modifier = modifier.clip(RoundedCornerShape(50)).background(Color.Black.copy(alpha = .45f)).padding(horizontal = 12.dp, vertical = 5.dp),
+    )
 }

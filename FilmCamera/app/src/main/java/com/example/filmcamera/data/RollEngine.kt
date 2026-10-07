@@ -41,6 +41,19 @@ object RollEngine {
         },
     )
 
+    /**
+     * 진행 중인 롤을 버린다(포기하고 초기화): 롤을 해제해 필름 잠금을 풀고, 이미 현상된 롤/단일 촬영/설정은 그대로 둔다.
+     * 사진 파일 삭제는 호출하는 쪽이 한다 - 상태를 먼저 지워야 삭제 도중 앱이 죽어도 롤이 되살아나지 않는다.
+     */
+    fun discardRoll(s: AppState): AppState {
+        check(s.roll != null) { "버릴 롤이 없습니다" }
+        return s.copy(roll = null)
+    }
+
+    /** 상태가 아직 필요로 하는 앱 전용 폴더의 사진 파일(상대 경로): 진행 중인 롤 + 갤러리로 내보내기가 안 끝난 현상 롤 */
+    fun referencedPrivateFiles(s: AppState): Set<String> =
+        (s.roll?.shots.orEmpty() + s.devRolls.filter { !it.exported }.flatMap { it.shots }).map { it.file }.toSet()
+
     fun pendingExports(s: AppState): List<DevelopedRoll> = s.devRolls.filter { !it.exported }
 
     fun setGrid(s: AppState, v: Boolean) = s.copy(grid = v)

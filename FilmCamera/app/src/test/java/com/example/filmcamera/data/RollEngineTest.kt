@@ -115,4 +115,66 @@ class RollEngineTest {
     fun missingFileGivesDefault() {
         assertEquals(AppState(), StateStore(File("does/not/exist.json")).load())
     }
+
+    @Test
+    fun discardRollClearsRollAndUnlocks() {
+        var s = RollEngine.loadRoll(AppState(), Film.GOLD, 24, 1)
+        for (i in 1..5) s = RollEngine.recordFilmShot(s, shot(Film.GOLD, i), 9).first
+        assertTrue(RollEngine.isLocked(s))
+        val d = RollEngine.discardRoll(s)
+        assertNull("롤이 해제된다", d.roll)
+        assertFalse("필름 잠금이 풀린다", RollEngine.isLocked(d))
+        // 버린 뒤에는 새 필름을 다시 장전할 수 있다
+        val again = RollEngine.loadRoll(d, Film.FOREST, 36, 20)
+        assertEquals(36, again.roll!!.remaining)
+    }
+
+    @Test
+    fun discardRollKeepsEverythingElse() {
+        var s = RollEngine.loadRoll(AppState(grid = true, stamp = false), Film.TUNGSTEN, 24, 1)
+        s = RollEngine.recordSingleShot(s, shot(Film.GOLD, 90))
+        s = RollEngine.setMode(s, Mode.SINGLE)
+        val dev = RollEngine.loadRoll(AppState(), Film.FOREST, 24, 3)
+        var done = dev
+        for (i in 1..24) done = RollEngine.recordFilmShot(done, shot(Film.FOREST, 100 + i), 50).first
+        s = s.copy(devRolls = done.devRolls)
+        val d = RollEngine.discardRoll(s)
+        assertEquals("단일 촬영 사진 유지", s.singleShots, d.singleShots)
+        assertEquals("현상된 롤 유지", s.devRolls, d.devRolls)
+        assertEquals(Mode.SINGLE, d.mode)
+        assertEquals(s.grid, d.grid)
+        assertEquals(s.stamp, d.stamp)
+    }
+
+    @Test
+    fun discardWithoutRollIsRejected() {
+        try { RollEngine.discardRoll(AppState()); fail() } catch (_: IllegalStateException) {}
+    }
+
+    @Test
+    fun discardedRollSurvivesRestart() {
+        // 버린 뒤 앱을 다시 열어도(상태 파일을 다시 읽어도) 롤이 되살아나지 않는다
+        val f = File.createTempFile("state", ".json")
+        var s = RollEngine.loadRoll(AppState(), Film.GOLD, 24, 1)
+        for (i in 1..3) s = RollEngine.recordFilmShot(s, shot(Film.GOLD, i), 9).first
+        StateStore(f).save(RollEngine.discardRoll(s))
+        assertNull(StateStore(f).load().roll)
+        f.delete()
+    }
+
+    @Test
+    fun referencedPrivateFilesCoverRollAndUnexportedDevelopedRolls() {
+        var s = RollEngine.loadRoll(AppState(), Film.GOLD, 24, 1)
+        for (i in 1..24) s = RollEngine.recordFilmShot(s, shot(Film.GOLD, i), 9).first      // 현상됨(내보내기 전)
+        s = RollEngine.loadRoll(s, Film.FOREST, 24, 2)
+        for (i in 31..33) s = RollEngine.recordFilmShot(s, shot(Film.FOREST, i), 9).first   // 진행 중 3장
+        val ref = RollEngine.referencedPrivateFiles(s)
+        assertEquals(24 + 3, ref.size)
+        assertTrue("rolls/pending/1.jpg" in ref && "rolls/pending/33.jpg" in ref)
+        // 내보내기가 끝난 롤의 파일은 더 이상 필요 없다
+        val exported = RollEngine.markExported(s, 1, (1..24).map { "content://x/$it" })
+        assertEquals(3, RollEngine.referencedPrivateFiles(exported).size)
+        // 버리면 진행 중이던 3장은 참조에서 빠진다(고아 파일로 정리 대상)
+        assertEquals(24, RollEngine.referencedPrivateFiles(RollEngine.discardRoll(s)).size)
+    }
 }

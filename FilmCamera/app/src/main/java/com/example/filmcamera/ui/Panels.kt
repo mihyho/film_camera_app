@@ -29,7 +29,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -256,10 +258,12 @@ fun ViewerPanel(shot: Shot, title: String, meta: String, onClose: () -> Unit) {
 
 @Composable
 fun SettingsPanel(
-    grid: Boolean, stamp: Boolean, hasRoll: Boolean, debug: Boolean,
+    grid: Boolean, stamp: Boolean, roll: Roll?, debug: Boolean,
     onGrid: (Boolean) -> Unit, onStamp: (Boolean) -> Unit,
-    onFinishRoll: () -> Unit, onWipe: () -> Unit, onBack: () -> Unit,
+    onDiscard: () -> Unit, onFinishRoll: () -> Unit, onWipe: () -> Unit, onBack: () -> Unit,
 ) {
+    val hasRoll = roll != null
+    var confirming by remember { mutableStateOf(false) }
     PanelScaffold("설정", onBack) {
         Column(
             Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
@@ -280,6 +284,7 @@ fun SettingsPanel(
                     color = PFLight.SageInk, style = body13.copy(lineHeight = 19.sp),
                 )
             }
+            if (roll != null) DiscardCard(roll) { confirming = true }
             if (debug) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("프로토타입 테스트", color = PFLight.Neutral700, modifier = Modifier.padding(horizontal = 4.dp),
@@ -288,6 +293,9 @@ fun SettingsPanel(
                     SecondaryButton("앱 데이터 지우기 (재설치)", enabled = true, onClick = onWipe)
                 }
             }
+        }
+        if (confirming && roll != null) {
+            DiscardConfirm(roll, onCancel = { confirming = false }, onConfirm = { confirming = false; onDiscard() })
         }
     }
 }
@@ -325,5 +333,72 @@ private fun SecondaryButton(text: String, enabled: Boolean, onClick: () -> Unit)
     ) {
         Text(text, color = if (enabled) PFLight.Text else PFLight.Text.copy(alpha = .35f),
             style = TextStyle(fontFamily = PFFonts.Figtree, fontSize = 14.sp, fontWeight = FontWeight.SemiBold))
+    }
+}
+
+
+private val DiscardRed = Color(0xFFB04A3A)
+
+/** 진행 중인 필름 카드: 필름을 버리는 기능의 진입점(다른 설정과 분리해 경고색으로) */
+@Composable
+private fun DiscardCard(roll: Roll, onClick: () -> Unit) {
+    Column(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp)).background(PFLight.Surface).padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text("진행 중인 필름", color = PFLight.Text,
+                style = TextStyle(fontFamily = PFFonts.Figtree, fontSize = 15.sp, fontWeight = FontWeight.Bold))
+            Text("${roll.film.displayName} · ${roll.shots.size} / ${roll.total}장 촬영", color = PFLight.Neutral700,
+                style = body13.copy(fontSize = 12.sp))
+        }
+        Text("중간에 포기하고 새로 시작하고 싶을 때 쓰세요. 찍은 사진은 모두 삭제되고 되돌릴 수 없어요.", color = PFLight.Neutral700,
+            style = body13.copy(lineHeight = 18.sp))
+        Box(
+            Modifier.fillMaxWidth().height(46.dp).clip(RoundedCornerShape(16.dp))
+                .border(1.5.dp, DiscardRed, RoundedCornerShape(16.dp))
+                .clickable(remember { MutableInteractionSource() }, null, onClick = onClick),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text("필름 버리기", color = DiscardRed,
+                style = TextStyle(fontFamily = PFFonts.Figtree, fontSize = 14.sp, fontWeight = FontWeight.Bold))
+        }
+    }
+}
+
+/** 되돌릴 수 없는 삭제라서 한 번 더 확인한다(패널 안에 뜨는 오버레이) */
+@Composable
+private fun DiscardConfirm(roll: Roll, onCancel: () -> Unit, onConfirm: () -> Unit) {
+    Box(
+        Modifier.fillMaxSize().background(Color(0xFF0A0A0A).copy(alpha = .55f))
+            .clickable(remember { MutableInteractionSource() }, null, onClick = onCancel),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(
+            Modifier.padding(horizontal = 24.dp).fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(PFLight.Surface)
+                .clickable(remember { MutableInteractionSource() }, null) { /* 카드 안 탭이 닫힘으로 새지 않게 */ }
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Text("필름을 버릴까요?", color = PFLight.Text, style = h2)
+            Text(
+                if (roll.shots.isEmpty()) "아직 찍은 사진이 없어요. ${roll.film.displayName} 필름을 빼내고 새로 고를 수 있어요."
+                else "${roll.film.displayName} 롤에 찍은 ${roll.shots.size}장의 사진이 모두 삭제되고 되돌릴 수 없어요. 필름 잠금이 풀려서 새 필름을 고를 수 있어요.",
+                color = PFLight.Neutral700, style = body13.copy(lineHeight = 19.sp),
+            )
+            Row(Modifier.fillMaxWidth().padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Box(
+                    Modifier.weight(1f).height(46.dp).clip(RoundedCornerShape(16.dp))
+                        .border(1.dp, PFLight.Text.copy(alpha = .16f), RoundedCornerShape(16.dp))
+                        .clickable(remember { MutableInteractionSource() }, null, onClick = onCancel),
+                    contentAlignment = Alignment.Center,
+                ) { Text("취소", color = PFLight.Text, style = TextStyle(fontFamily = PFFonts.Figtree, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)) }
+                Box(
+                    Modifier.weight(1f).height(46.dp).clip(RoundedCornerShape(16.dp)).background(DiscardRed)
+                        .clickable(remember { MutableInteractionSource() }, null, onClick = onConfirm),
+                    contentAlignment = Alignment.Center,
+                ) { Text("버리기", color = Color.White, style = TextStyle(fontFamily = PFFonts.Figtree, fontSize = 14.sp, fontWeight = FontWeight.Bold)) }
+            }
+        }
     }
 }
